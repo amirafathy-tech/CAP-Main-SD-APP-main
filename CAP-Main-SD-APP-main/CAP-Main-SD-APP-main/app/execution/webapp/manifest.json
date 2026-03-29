@@ -1,0 +1,132 @@
+{
+  "_version": "1.76.0",
+  "sap.app": {
+    "id": "execution",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.18.6",
+      "toolsId": "4baded60-5344-4f21-b5ac-f2a5a7880d2d"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/sales-cloud/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.140.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "execution.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "execution.view",
+        "async": true,
+        "viewPath": "execution.view"
+      },
+      "routes": [
+        {
+          "name": "RouteView1",
+          "pattern": ":?query:",
+          "target": [
+            "TargetView1"
+          ]
+        },
+        {
+          "name": "ExecutionOrder",
+          "pattern": "ExecutionOrder/{docNumber}/{itemNumber}",
+          "target": [
+            "ExecutionOrder"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetView1": {
+          "id": "Home",
+          "name": "Home"
+        },
+        "ExecutionOrder": {
+          "id": "ExecutionOrder",
+          "name": "ExecutionOrder"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "execution.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  },
+   "sap.cloud": {
+    "public": true,
+    "service": "Maramer-approuter"
+  }
+}

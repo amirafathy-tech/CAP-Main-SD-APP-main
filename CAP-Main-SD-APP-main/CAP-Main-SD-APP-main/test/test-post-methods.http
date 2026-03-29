@@ -1,0 +1,107 @@
+### Test patchSalesQuotationItemPricing
+POST http://localhost:5000/salesquotationpricingcloudpatch/patchSalesQuotationItemPricing
+Content-Type: application/json
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+X-HTTP-Method-Override: PATCH
+
+{
+  "SalesQuotation": "20000015",
+  "SalesQuotationItem": "10",
+  "PricingProcedureStep": "20",
+  "PricingProcedureCounter": "1",
+  "body": "{\n  \"ConditionType\": \"PPR0\",\n  \"ConditionRateValue\": \"100.00\"\n}"
+}
+
+### Test patchSalesOrderItemPricing
+POST http://localhost:5000/salesorderitempricingcloudpost/patchSalesOrderItemPricing
+Content-Type: application/json
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+X-HTTP-Method-Override: PATCH
+
+{
+  "SalesOrder": "3",
+  "SalesOrderItem": "10",
+  "PricingProcedureStep": "20",
+  "PricingProcedureCounter": "1",
+  "body": "{\n  \"ConditionType\": \"PPR0\",\n  \"ConditionRateValue\": \"100.00\"\n}"
+}
+
+### Test patchDebitMemoItemPricing
+POST http://localhost:5000/debitmemopostcloudpatch/patchDebitMemoItemPricing
+Content-Type: application/json
+Authorization: Basic QlRQX1VSEVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+X-HTTP-Method-Override: PATCH
+
+{
+  "DebitMemoRequest": "70000001",
+  "DebitMemoRequestItem": "10",
+  "PricingProcedureStep": "20",
+  "PricingProcedureCounter": "1",
+  "body": "{\n  \"ConditionType\": \"PPR0\",\n  \"ConditionRateValue\": \"100.00\"\n}"
+}
+
+### Test GET all Currencies
+GET http://localhost:5000/currencies
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+### Test GET Currency by ID
+GET http://localhost:5000/currencies/1
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+### Test POST new Currency
+POST http://localhost:5000/currencies
+Content-Type: application/json
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+{
+  "currencyCode": 2,
+  "code": "EUR",
+  "description": "Euro"
+}
+
+### Test DELETE Currency
+DELETE http://localhost:5000/currencies/1
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+### Test PATCH Currency
+PATCH http://localhost:5000/currencies/1
+Content-Type: application/json
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+{
+  "code": "USD",
+  "description": "United States Dollar"
+}
+
+### Test GET all LineTypes
+GET http://localhost:5000/linetypes
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+### Test GET LineType by ID
+GET http://localhost:5000/linetypes/1
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+### Test POST new LineType via createLineType action
+POST http://localhost:5000/linetypes/createLineType
+Content-Type: application/json
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+{
+  "lineTypeCode": 1,
+  "code": "LT001",
+  "description": "Line Type One"
+}
+
+### Test DELETE LineType
+DELETE http://localhost:5000/linetypes/1
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+### Test PATCH LineType
+PATCH http://localhost:5000/linetypes/1
+Content-Type: application/json
+Authorization: Basic QlRQX1VTRVIxOiN5aVZmZUhqRm9sRngzZ0tFd0NCRmNXdllrUHpyUURFTkVBUjhYbjU=
+
+{
+  "code": "LT002",
+  "description": "Updated Line Type"
+}

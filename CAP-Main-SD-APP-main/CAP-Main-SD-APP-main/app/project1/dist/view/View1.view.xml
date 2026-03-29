@@ -1,0 +1,93 @@
+<mvc:View
+    controllerName="project1.controller.View1"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:sap.m="sap.m"
+    xmlns:f="sap.f"
+    xmlns:w="sap.ui.integration.widgets"
+    xmlns:tnt="sap.tnt"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:table="sap.ui.table"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:u="sap.ui.unified"
+    xmlns:macros="sap.fe.macros"
+>
+    <Page
+        id="_IDGenPage"
+        title="SD App1"
+    >
+        <content>
+            <HBox id="_IDGenHBox3">
+                <GenericTile
+                    id="_IDGenGenericTile1"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Service Types"
+                    press="onNavigateToServiceType"
+                >
+                    <TileContent
+                        id="_IDGenTileContent"
+                        footer="Service Types Ops"
+                    >
+                        <ImageContent
+                            id="_IDGenImageContent"
+                            src="sap-icon://activity-items"
+                        />
+                    </TileContent>
+                </GenericTile>
+                <GenericTile
+                    id="_IDGenGenericTile3"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Service Master"
+                    press="onNavigateToServiceMaster"
+                >
+                    <TileContent
+                        id="_IDGenTileContent2"
+                        footer="Service Masters Ops"
+                    >
+                        <ImageContent
+                            id="_IDGenImageContent2"
+                            src="sap-icon://accelerated"
+                        />
+                    </TileContent>
+                </GenericTile>
+                <GenericTile
+                    id="_IDGenGenericTile2"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Models"
+                    press="onNavigateToModel"
+                >
+                    <TileContent
+                        id="_IDGenTileContent1"
+                        footer=" Models Ops"
+                    >
+                        <ImageContent
+                            id="_IDGenImageContent1"
+                            src="sap-icon://add-activity-2"
+                        />
+                    </TileContent>
+                </GenericTile>
+
+                <GenericTile
+                    id="_IDGenGenericTile4"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                    header="Formula"
+                    press="onNavigateToFormula"
+                >
+                    <TileContent
+                        id="_IDGenTileContent3"
+                        footer=" Formulas Ops"
+                    >
+                        <ImageContent
+                            id="_IDGenImageContent3"
+                            src="sap-icon://legend"
+                        />
+                    </TileContent>
+                </GenericTile>
+
+                <!-- <Button id="_IDGenButton8" text="Example" press="onNavigateToExample" class="sapUiSmallMarginRight" /> -->
+            </HBox>
+        </content>
+    </Page>
+</mvc:View>

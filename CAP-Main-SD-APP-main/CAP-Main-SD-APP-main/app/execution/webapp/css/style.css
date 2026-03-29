@@ -1,0 +1,33 @@
+/* Enter your custom styles here */
+
+.myRectangle {
+    border: 1px solid #d0d0d0;
+    background-color: #fafafa;
+    padding: 12px 24px;
+    margin: 2px;
+    min-width: 150px;   
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+}
+/*For Bold Labels*/
+.myLabel {
+    font-size: large;
+    font-weight: bold;
+}
+
+.myHomeTitle{
+    font-size: large;
+    font-weight: bold;
+    color: white;
+}
+.homeBackgroundTitle{
+    border: 1px solid #d0d0d0;
+    background-color: #0071f2cf;
+    padding: 12px 24px;
+    margin: 2px;
+    min-width: 180px;   
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+}

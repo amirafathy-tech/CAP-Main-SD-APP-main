@@ -1,0 +1,279 @@
+<mvc:View
+    controllerName="project1.controller.AddServiceMaster"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:sap.m="sap.m"
+    xmlns:f="sap.f"
+    xmlns:w="sap.ui.integration.widgets"
+    xmlns:tnt="sap.tnt"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:table="sap.ui.table"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:u="sap.ui.unified"
+    xmlns:macros="sap.fe.macros"
+>
+    <Page
+        id="_IDGenPage1"
+        title="Service Master"
+    >
+        <Panel
+            id="_IDGenPanel2"
+            class="sapUiSmallMargin"
+        >
+            <HBox id="_IDGenVBox7">
+                <Label
+                    id="_IDGenLabel7"
+                    text="Service Number (ID):"
+                    class="sapUiSmallMargin"
+                />
+                <Input
+                    id="_IDGenInput1"
+                    type="Number"
+                    width="200px"
+                    class="sapUiSmallMargin"
+                />
+                <Label
+                    id="_IDGenLabel9"
+                    text="Search Term"
+                    class="sapUiSmallMargin"
+                    required="true"
+                />
+                <Input
+                    id="_IDGenInput2"
+                    required="true"
+                    width="200px"
+                    class="sapUiSmallMargin"
+                />
+                <Label
+                    id="_IDGenLabel18"
+                    text="Description"
+                    class="sapUiSmallMargin"
+                    required="true"
+                />
+                <Input
+                    id="_IDGenInput3"
+                    required="true"
+                    width="200px"
+                    class="sapUiSmallMargin"
+                />
+                <Label
+                    id="_IDGenLabel19"
+                    text="Service Text"
+                    class="sapUiSmallMargin"
+                />
+                <Input
+                    id="_IDGenInput4"
+                    required="true"
+                    width="200px"
+                    class="sapUiSmallMargin"
+                />
+            </HBox>
+            <HBox
+                id="_IDGenHBox10"
+                class="sapUiSmallMargin"
+            >
+                <Label
+                    id="_IDGenLabel16"
+                    text="Short Text Change Allowed:"
+                    class="sapUiSmallMargin"
+                />
+                <CheckBox id="_IDGenCheckBox1" />
+                <Label
+                    id="_IDGenLabel21"
+                    text="Deletion Indicator:"
+                    class="sapUiSmallMargin"
+                />
+                <CheckBox id="_IDGenCheckBox3" />
+            </HBox>
+            <HBox
+                id="_IDGenHBox11"
+                class="sapUiSmallMargin"
+            >
+                <VBox
+                    id="_IDGenHBox13"
+                    class="sapUiSmallMargin"
+                >
+                    <Label
+                        id="_IDGenLabel13"
+                        required="true"
+                        class="sapUiSmallMarginEnd"
+                        text="Select Service Type"
+                    />
+                    <Select
+                        id="_IDGenSelect5"
+                        class="sapUiSmallMarginStart"
+                        width="200px"
+                        forceSelection="false"
+                        items="{	path: 'serviceTypes>/'}"
+                    >
+                        <core:Item
+                            id="_IDGenItem5"
+                            key="{serviceTypes>serviceTypeCode}"
+                            text="{serviceTypes>description}"
+                        />
+                    </Select>
+                </VBox>
+                <VBox
+                    id="_IDGenVBox12"
+                    class="sapUiSmallMargin"
+                >
+                    <Label
+                    required="true"
+                        id="_IDGenLabel14"
+                        class="sapUiSmallMarginEnd"
+                        text="Select Base UnitOfMeasurment"
+                    />
+                    <Select
+                        id="_IDGenSelect1"
+                        class="sapUiSmallMarginStart"
+                        width="200px"
+                        forceSelection="false"
+                        items="{	path: 'unitsOfMeasurement>/'}"
+                    >
+                        <core:Item
+                            id="_IDGenItem6"
+                            key="{unitsOfMeasurement>code}"
+                            text="{unitsOfMeasurement>description}"
+                        />
+                    </Select>
+                </VBox>
+            </HBox>
+        </Panel>
+        <Panel
+            id="_IDGenPanel3"
+            headerText="Control Data"
+        >
+            <Text
+                id="_IDGenText36"
+                text="Conversion:"
+            />
+            <HBox id="_IDGenHBox14">
+                <VBox
+                    id="_IDGenVBox9"
+                    class="sapUiSmallMargin"
+                >
+                    <Label
+                        id="_IDGenLabel20"
+                        text="To Be Converted Number:"
+                        class="sapUiSmallMarginStart"
+                    />
+                    <Input
+                        id="_IDGenInput5"
+                        type="Number"
+                        width="250px"
+                        class="sapUiSmallMarginStart"
+                    />
+                </VBox>
+                <VBox
+                    id="_IDGenVBox14"
+                    class="sapUiSmallMargin"
+                >
+                    <Label
+                        id="_IDGenLabel22"
+                        text="Select To Be Converted UOM:"
+                        class="sapUiSmallMarginStart"
+                    />
+
+                    <Select
+                        id="_IDGenSelect2"
+                        class="sapUiSmallMarginStart"
+                        width="200px"
+                        forceSelection="false"
+                        items="{	path: 'unitsOfMeasurement>/'}"
+                    >
+                        <core:Item
+                            id="_IDGenItem3"
+                             key="{unitsOfMeasurement>code}"
+                            text="{unitsOfMeasurement>description}"
+                        />
+                    </Select>
+                </VBox>
+            </HBox>
+            <HBox id="_IDGenHBox15">
+                <VBox
+                    id="_IDGenVBox13"
+                    class="sapUiSmallMargin"
+                >
+                    <Label
+                        id="_IDGenLabel23"
+                        text="Converted Number:"
+                        class="sapUiSmallMarginStart"
+                    />
+                    <Input
+                        id="_IDGenInput9"
+                        type="Number"
+                        width="250px"
+                        class="sapUiSmallMarginStart"
+                    />
+                </VBox>
+                <VBox
+                    id="_IDGenVBox15"
+                    class="sapUiSmallMargin"
+                >
+                    <Label
+                        id="_IDGenLabel24"
+                        text="Select  Converted UOM:"
+                        class="sapUiSmallMarginStart"
+                    />
+                    <Select
+                        id="_IDGenSelect3"
+                        class="sapUiSmallMarginStart"
+                        width="200px"
+                        forceSelection="false"
+                    items="{	path: 'unitsOfMeasurement>/'}"
+
+                    >
+                        <core:Item
+                            id="_IDGenItem4"
+                           key="{unitsOfMeasurement>code}"
+                            text="{unitsOfMeasurement>description}"
+                        />
+                    </Select>
+                </VBox>
+            </HBox>
+            <HBox
+                id="_IDGenHBox16"
+                class="sapUiSmallMargin"
+            >
+                <Label
+                    id="_IDGenLabel26"
+                    text="MainItem"
+                    class="marginTop"
+                    width="200px"
+                />
+                <CheckBox id="_IDGenCheckBox4" />
+                <Label
+                    id="_IDGenLabel27"
+                    text="Select Material Group:"
+                    class="sapUiSmallMarginStart marginTop marginEnd marginStart"
+                />
+                <Select
+                    id="_IDGenSelect4"
+                    class="sapUiSmallMarginStart"
+                    width="200px"
+                    forceSelection="false"
+                    items="{	path: 'materialGroups>/'}"
+                >
+                    <core:Item
+                        id="_IDGenItem7"
+                        key="{materialGroups>materialGroupCode}"
+                        text="{materialGroups>description}"
+                    />
+                </Select>
+            </HBox>
+            <HBox
+                id="_IDGenHBox17"
+                justifyContent="Center"
+                class="sapUiSmallMargin"
+            >
+                <Button
+                    id="_IDGenButton27"
+                    text="Add"
+                    press="onAddPress"
+                />
+            </HBox>
+        </Panel>
+    </Page>
+</mvc:View>

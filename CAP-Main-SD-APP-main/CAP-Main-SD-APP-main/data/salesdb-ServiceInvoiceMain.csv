@@ -1,0 +1,2 @@
+unitOfMeasurementCode,serviceNumberCode,currencyCode,totalQuantity,quantity,amountPerUnit,unlimitedOverfulfillment
+Gram,1,egp,10,12,10,true

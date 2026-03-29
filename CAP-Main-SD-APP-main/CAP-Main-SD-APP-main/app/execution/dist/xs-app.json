@@ -1,0 +1,20 @@
+{
+  "welcomeFile": "/index.html",
+  "authenticationMethod": "route",
+  "routes": [
+    {
+      "source": "^/odata/v4/sales-cloud/(.*)$",
+      "target": "odata/v4/sales-cloud/$1",
+      "authenticationType": "xsuaa",
+      "destination": "Maramer-srv-api",
+      "csrfProtection": false
+    },
+ 
+    {
+      "source": "^(.*)$",
+      "target": "$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
+    }
+  ]
+}

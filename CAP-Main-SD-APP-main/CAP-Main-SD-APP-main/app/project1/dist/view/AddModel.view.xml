@@ -1,0 +1,127 @@
+<mvc:View
+    controllerName="project1.controller.AddModel"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+>
+    <Page
+        id="addModelPage"
+        title="Add Model"
+    >
+        <content>
+            <Panel
+                id="_IDGenPanel4"
+                class="sapUiSmallMargin"
+                expandable="false"
+            >
+                <HBox
+                    id="_IDGenHBox4"
+                    class="sapUiSmallMargin"
+                   
+                >
+                    <VBox
+                        id="_IDGenVBox17"
+                        class="sapUiSmallMarginEnd"
+                    >
+                        <Label
+                            id="_IDGenLabel57"
+                            text="ModelServ.Spec:"
+                        />
+                        <Input
+                            id="modelServSpec"
+                            width="200px"
+                        />
+                    </VBox>
+
+                    <VBox
+                        id="_IDGenVBox3"
+                        class="sapUiSmallMarginEnd"
+                    >
+                        <Label
+                            id="_IDGenLabel109"
+                            text="Blocking Indicator:"
+                        />
+                        <CheckBox id="blockingIndicator" />
+                    </VBox>
+
+                    <VBox
+                        id="_IDGenVBox4"
+                        class="sapUiSmallMarginEnd"
+                    >
+                        <Label
+                            id="_IDGenLabel2"
+                            text="Service Selection:"
+                        />
+                        <CheckBox id="serviceSelection" />
+                    </VBox>
+                </HBox>
+               
+              
+            </Panel>
+             <Panel id="_IDGenPanel1" >
+                  <Label
+                    id="_IDGenLabel3"
+                    text="General Data:"
+                    design="Bold"
+                />
+
+                <form:SimpleForm
+                    id="_IDGenSimpleForm"
+                    editable="true"
+                    layout="ResponsiveGridLayout"
+                >
+                    <form:content>
+                        <Label
+                            id="_IDGenLabel4"
+                            text="Description"
+                            required="true"
+                        />
+                        <Input
+                            id="description"
+                            width="250px"
+                        />
+
+                        <Label
+                            id="_IDGenLabel5"
+                            text="Search Term"
+                        />
+                        <Input
+                            id="searchTerm"
+                            width="250px"
+                        />
+
+                        <Label
+                            id="_IDGenLabel110"
+                            required="true"
+                            text="Select Currency"
+                        />
+                        <Select
+                            id="currency"
+                            width="200px"
+                            forceSelection="false"
+                            items="{path: 'currencies>/'}"
+                        >
+                            <core:Item
+                                id="_IDGenItem8"
+                                key="{currencies>currencyCode}"
+                                text="{currencies>description}"
+                            />
+                        </Select>
+                    </form:content>
+                </form:SimpleForm>
+                <HBox
+                    id="_IDGenHBox5"
+                    justifyContent="Center"
+                >
+                    <Button
+                        id="_IDGenButton16"
+                        text="Add Model"
+                        icon="sap-icon://add"
+                        press="onAddModel"
+                    />
+                </HBox>
+                </Panel>
+        </content>
+    </Page>
+</mvc:View>

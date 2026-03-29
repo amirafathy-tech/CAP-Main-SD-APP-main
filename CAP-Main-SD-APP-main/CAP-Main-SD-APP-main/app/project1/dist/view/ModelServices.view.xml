@@ -1,0 +1,908 @@
+<mvc:View
+    controllerName="project1.controller.ModelServices"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:sap.m="sap.m"
+    xmlns:w="sap.ui.integration.widgets"
+    xmlns:tnt="sap.tnt"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:table="sap.ui.table"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:u="sap.ui.unified"
+    xmlns:macros="sap.fe.macros"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:r="sap.ui.table.rowmodes"
+>
+    <Page
+        id="_IDGenPage7"
+        title="Model Services"
+        enableScrolling="true"
+        class="sapUiContentPadding"
+    >
+        <headerContent>
+            <Button
+                id="_IDGenButton36"
+                icon="sap-icon://add"
+                tooltip="Add"
+                text="Add New Model Service"
+                press="onOpenMainDialog"
+                class="customTopMargin"
+            />
+        </headerContent>
+        <Panel
+            id="_IDGenPanel5"
+            expandable="true"
+            expanded="true"
+            class="customPanel "
+        >
+
+            <VBox id="_IDGenVBox16">
+                <HBox id="_IDGenHBox23">
+                    <Label
+                        id="_IDGenLabel55"
+                        text="Short Text:"
+                        class="sapUiSmallMargin"
+                    />
+                    
+                    <Button
+                        id="_IDGenButton41"
+                        text="Export to Excel"
+                        class="sapUiSmallMargin"
+                        press="onExportToExcel"
+                        type="Transparent"
+                        icon="sap-icon://excel-attachment"
+                    />
+                    <Button
+                        id="_IDGenButton42"
+                        text="Import from Excel"
+                        class="sapUiSmallMargin"
+                        press="_openExcelUploadDialogModelSpec"
+                        type="Transparent"
+                        icon="sap-icon://excel-attachment"
+                    />
+                </HBox>
+                <HBox
+                    id="_IDGenHBox21"
+                    justifyContent="SpaceBetween"
+                    class="summarySection"
+                >
+                   
+                </HBox>
+                       <m:HBox id="_IDGenHBox8"
+                justifyContent="Center"
+                alignItems="Center"
+            >
+                <m:VBox id="_IDGenVBox6"
+                    class="myRectangle"
+                    alignItems="Center"
+                    justifyContent="Center"
+                >
+                    <m:Text id="_IDGenText33"
+                        text="Total Value:"
+                    />
+                </m:VBox>
+                <m:VBox id="_IDGenVBox19"
+                    class="myRectangle"
+                    alignItems="Center"
+                    justifyContent="Center"
+                >
+                    <m:Text id="_IDGenText59"
+                        text="{/Total}"
+                    />
+                </m:VBox>
+                <m:VBox id="_IDGenVBox20"
+                    class="myRectangle"
+                    alignItems="Center"
+                    justifyContent="Center"
+                >
+                    <m:Text id="_IDGenText91"
+                        text="SAR"
+                    />
+                </m:VBox>
+            </m:HBox>
+            </VBox>
+            
+        </Panel>
+         <VBox id="_IDGenVBox18">
+                        <!-- <Label id="_IDGenLabel57" text="Total Records:"/>
+                            <Text id="totalRecords" text="{= ${/Models}.length }" /> -->
+                        <HBox id="_IDGenHBox24">
+                            <m:SearchField
+                                id="filterLine"
+                                placeholder="Search Models Specs..."
+                                width="250px"
+                                search="onSearchModelServices"
+                                liveChange="onSearchModelServices"
+                            />
+                        </HBox>
+                    </VBox>
+        <table:Table
+            id="modelServicesTable"
+            rows="{/ModelServices}"
+            visibleRowCount="10"
+            minAutoRowCount="5"
+            enableColumnReordering="true"
+            columnHeaderHeight="40"
+        >
+            <table:columns>
+                <table:Column
+                    id="_IDGenColumn29"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText54"
+                            text="Line"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText28"
+                            text="{lineIndex}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn30"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText55"
+                            text="Service.No"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText29"
+                            text="{serviceNumberCode}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn31"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText56"
+                            text="ShortText"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText30"
+                            text="{shortText}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn32"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText57"
+                            text="Quantity"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText31"
+                            text="{quantity}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn33"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText58"
+                            text="Formula"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText32"
+                            text="{formulaDescription}"
+                        />
+                    </table:template>
+                </table:Column>
+                <!-- <table:Column id="_IDGenColumn34" width="120px">
+                        <table:label><Text id="_IDGenText59" text="Formula Parameters" /></table:label>
+                        <table:template><Text id="_IDGenText33" text="{}" /></table:template>
+                    </table:Column> -->
+                <table:Column
+                    id="_IDGenColumn35"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText60"
+                            text="GrossPrice"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText34"
+                            text="{grossPrice}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn36"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText61"
+                            text="Net Value"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText62"
+                            text="{netValue}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn37"
+                    width="120px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText63"
+                            text="UnitOfMeasure*"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText64"
+                            text="{unitOfMeasurementDescription}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn38"
+                    width="80px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText65"
+                            text="Currency"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText66"
+                            text="{currencyDescription}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn11"
+                    width="120px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText67"
+                            text="OverF.Percentage"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText68"
+                            text="{overFulfilmentPercentage}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn12"
+                    width="120px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText69"
+                            text="PriceChangeAllowed"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText39"
+                            text="{priceChangedAllowed}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn13"
+                    width="120px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText70"
+                            text="UnlimitedOverF"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText71"
+                            text="{unlimitedOverFulfillment}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn14"
+                    width="150px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText72"
+                            text="PricePerUnitOfMeasurement"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText73"
+                            text="{pricePerUnitOfMeasurement}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn15"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText74"
+                            text="Mat Group"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText75"
+                            text="{materialGroupCode}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn16"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText76"
+                            text="Service Type"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText43"
+                            text="{serviceTypeCode}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn17"
+                    width="120px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText77"
+                            text="External.Service.No"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText44"
+                            text="{externalServiceNumber}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn18"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText78"
+                            text="Service Text"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText45"
+                            text="{serviceText}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn39"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText79"
+                            text="Line Text"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText46"
+                            text="{lineText}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn40"
+                    width="120px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText80"
+                            text="PersonnelNumber"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText47"
+                            text="{personnelNumberCode}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn21"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText21"
+                            text="Line Type"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText48"
+                            text="{lineTypeCode}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn41"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText22"
+                            text="Line Number"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText49"
+                            text="{lineNumber}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn23"
+                    width="80px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText23"
+                            text="Alt"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText50"
+                            text="{alternatives}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn24"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText24"
+                            text="Bidder's Line"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText51"
+                            text="{biddersLine}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn25"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText25"
+                            text="Supp.Line"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText52"
+                            text="{supplementaryLine}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn26"
+                    width="100px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText26"
+                            text="Cstg Ls"
+                        />
+                    </table:label>
+                    <table:template>
+                        <Text
+                            id="_IDGenText53"
+                            text="{lotSizeForCostingIsOne}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="_IDGenColumn27"
+                    width="150px"
+                >
+                    <table:label>
+                        <Text
+                            id="_IDGenText27"
+                            text="Actions"
+                        />
+                    </table:label>
+                    <table:template>
+                        <HBox id="_IDGenHBox6">
+                            <Button
+                                id="_IDGenButton17"
+                                icon="sap-icon://information"
+                                press="onDetails"
+                            />
+                            <Button
+                                id="_IDGenButton19"
+                                icon="sap-icon://edit"
+                                press=".onEditModelSpecDetails"
+                            />
+                            <Button
+                                id="_IDGenButton18"
+                                icon="sap-icon://delete"
+                                press="onDelete"
+                            />
+                        </HBox>
+                    </table:template>
+                </table:Column>
+            </table:columns>
+        </table:Table>
+        <!-- Main Item Dialog -->
+        <m:Dialog
+            id="addModelServiceDialog"
+            title="Add Main Item"
+            contentWidth="800px"
+            contentHeight="80%"
+            resizable="true"
+            draggable="true"
+        >
+            <f:SimpleForm
+                id="mainItemForm"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                class="sapUiSmallMargin"
+            >
+                <f:content>
+                    <m:Label
+                        id="_IDGenLabel28"
+                        text="Service.No"
+                    />
+                    <m:Select
+                        id="mainModelServiceNoSelect"
+                        selectedKey="{/SelectedServiceNumber}"
+                        forceSelection="false"
+                        items="{path: '/ServiceNumbers'}"
+                        change=".onServiceNumberChange"
+                    >
+                        <core:Item
+                            id="_IDGenItem14"
+                            key="{serviceNumberCode}"
+                            text="{description}"
+                        />
+                    </m:Select>
+                    <m:Label
+                        id="_IDGenLabel25"
+                        text="Short Text"
+                    />
+                    <m:Input
+                        id="mainShortTextInput"
+                        placeholder="Short Text"
+                    />
+                    <m:Label
+                        id="_IDGenLabel6"
+                        text="Quantity"
+                    />
+                    <m:Input
+                        id="mainQuantityInput"
+                        placeholder="Quantity"
+                        type="Number"
+                        liveChange=".onInputChange"
+                    />
+                    <m:Label
+                        id="_IDGenLabel34"
+                        text="Gross Price"
+                    />
+                    <m:Input
+                        id="mainAmountPerUnitInput"
+                        type="Number"
+                        placeholder="Gross Price"
+                        liveChange=".onInputChange"
+                    />
+                    <m:Label
+                        id="_IDGenLabel35"
+                        text="Net Value"
+                    />
+                    <m:Input
+                        id="mainTotalInput"
+                        placeholder="Net Value"
+                        editable="false"
+                        value="{/netValue}"
+                        liveChange=".onInputChange"
+                    />
+                    <m:Label
+                        id="_IDGenLabel30"
+                        text="Formula"
+                    />
+                    <m:Select
+                        id="formulaSelect"
+                        forceSelection="false"
+                        items="{path: '/Formulas'}"
+                        change="onFormulaSelected"
+                    >
+                        <core:Item
+                            id="_IDGenItem11"
+                            key="{formulaCode}"
+                            text="{description}"
+                        />
+                    </m:Select>
+                    <m:Label
+                        id="_IDGenLabel31"
+                        text=""
+                    />
+                    <m:Button
+                        id="btnParameters"
+                        text="Enter Parameters"
+                        enabled="{/HasSelectedFormula}"
+                        press="onOpenFormulaDialog"
+                    />
+                    <m:Label
+                        id="_IDGenLabel32"
+                        text="UOM"
+                    />
+                    <m:Select
+                        id="mainUOMSelect"
+                        forceSelection="false"
+                        items="{path: '/UOM'}"
+                    >
+                        <core:Item
+                            id="_IDGenItem12"
+                            key="{unitOfMeasurementCode}"
+                            text="{description}"
+                        />
+                    </m:Select>
+                    <Label
+                        id="_IDGenLabel29"
+                        text="Currency"
+                    />
+                    <Select
+                        id="mainCurrencySelect"
+                        forceSelection="false"
+                        items="{path: '/Currency'}"
+                    >
+                        <core:Item id="mainCurrency"
+                            key="{currencyCode}"
+                            text="{description}"
+                        />
+                    </Select>
+                    <Label
+                        id="_IDGenLabel36"
+                        text="OverF.Percentage"
+                    />
+                    <Input
+                        id="mainOverFInput"
+                        placeholder="OverFulfilment %"
+                        type="Number"
+                    />
+                    <Label
+                        id="_IDGenLabel37"
+                        text="Price Change Allowed"
+                    />
+                    <CheckBox
+                        id="mainPriceChangeAllowed"
+                    />
+                    <Label
+                        id="_IDGenLabel38"
+                        text="Unlimited OverFulfillment"
+                    />
+                    <CheckBox
+                        id="mainUnlimitedOverF"
+                    />
+                    <Label
+                        id="_IDGenLabel39"
+                        text="Price Per Unit Of Measurement"
+                    />
+                    <Input
+                        id="mainPricePerUnitInput"
+                        type="Number"
+                        placeholder="Price/Unit"
+                    />
+                    <Label
+                        id="_IDGenLabel40"
+                        text="Mat Group"
+                    />
+                    <Select
+                        id="mainMatGroupSelect"
+                        forceSelection="false"
+                        items="{path: '/MatGroups'}"
+                    >
+                        <core:Item
+                            id="_IDGenItem9"
+                            key="{materialGroupCode}"
+                            text="{description}"
+                        />
+                    </Select>
+                    <Label
+                        id="_IDGenLabel41"
+                        text="Service Type"
+                    />
+                    <Select
+                        id="mainServiceTypeSelect"
+                        forceSelection="false"
+                        items="{path: '/ServiceTypes'}"
+                    >
+                        <core:Item
+                            id="_IDGenItem10"
+                            key="{serviceTypeCode}"
+                            text="{description}"
+                        />
+                    </Select>
+                    <Label
+                        id="_IDGenLabel33"
+                        text="External Service No"
+                    />
+                    <Input
+                        id="mainExternalServiceNo"
+                        placeholder="External Service No"
+                    />
+                    <Label
+                        id="_IDGenLabel42"
+                        text="Service Text"
+                    />
+                    <Input
+                        id="mainServiceText"
+                        placeholder="Service Text"
+                    />
+                    <Label
+                        id="_IDGenLabel43"
+                        text="Line Text"
+                    />
+                    <Input
+                        id="mainLineText"
+                        placeholder="Line Text"
+                    />
+                    <Label
+                        id="_IDGenLabel44"
+                        text="Personnel Number"
+                    />
+                    <Select
+                        id="personnelNumber"
+                        forceSelection="false"
+                        items="{path: '/personnelNumbers'}"
+                    >
+                        <core:Item
+                            id="_IDGenItem13"
+                            key="{personnelNumberCode}"
+                            text="{description}"
+                        />
+                    </Select>
+                    <Label
+                        id="_IDGenLabel15"
+                        text="Service Types"
+                    />
+                    <Select
+                        id="serviceTypes"
+                        forceSelection="false"
+                        items="{path: '/ServiceTypes'}"
+                    >
+                        <core:Item
+                            id="_IDGenItem15"
+                            key="{serviceTypeCode}"
+                            text="{description}"
+                        />
+                    </Select>
+                    <Label
+                        id="_IDGenLabel45"
+                        text="Line Types"
+                    />
+                    <Select
+                        id="lineTypes"
+                        forceSelection="false"
+                        items="{path: '/LineTypes'}"
+                    >
+                        <core:Item
+                            id="_IDGenItem17"
+                            key="{lineTypeCode}"
+                            text="{description}"
+                        />
+                    </Select>
+                    <Label id="_IDGenLabel47"
+                        text="Line Number"
+                    />
+                    <Input id="_IDGenInput6"
+                        placeholder="Line Number"
+                    />
+                    <Label id="_IDGenLabel48"
+                        text="Alt"
+                    />
+                    <Input id="_IDGenInput7"
+                        placeholder="ALT"
+                    />
+                   
+                    <Label id="_IDGenLabel49"
+                        text=" Bidder's Line"
+                    />
+                    <CheckBox id="_IDGenCheckBox"
+                    />
+                    <Label id="_IDGenLabel50"
+                        text="Supp.Line"
+                    />
+                    <CheckBox id="_IDGenCheckBox2"
+                    />
+                       <Label id="_IDGenLabel46"
+                        text="Cstg_Ls"/>
+                    <CheckBox id="_IDGenCheckBox6"
+                    />
+                </f:content>
+            </f:SimpleForm>
+            <m:buttons>
+                <m:Button
+                    id="_IDGenButton7"
+                    text="Add"
+                    type="Emphasized"
+                    press=".onAddModelSpecDetails"
+                />
+                <m:Button
+                    id="_IDGenButton5"
+                    text="Cancel"
+                    press=".onCloseDialog"
+                />
+            </m:buttons>
+        </m:Dialog>
+        <m:Dialog
+            id="formulaDialog"
+            title="Enter Formula Parameters"
+            class="sapUiContentPadding">
+            <m:VBox id="formulaParamContainer" />
+            <m:endButton>
+                <m:Button
+                    id="_IDGenButton8"
+                    text="OK"
+                    type="Emphasized"
+                    press=".onFormulaDialogOK"
+                />
+            </m:endButton>
+        </m:Dialog>
+    </Page>
+</mvc:View>

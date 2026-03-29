@@ -1,0 +1,5 @@
+lineTypeCode,code,description
+1,Standard line,Default line type
+2,Informatory line,Informational line
+3,Internal line,Internal usage line
+4,Contingency line,Backup or contingency line

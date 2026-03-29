@@ -1,0 +1,366 @@
+<mvc:View
+    controllerName="tendering.controller.Tendering"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:m="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:table="sap.ui.table"
+    xmlns:r="sap.ui.table.rowmodes"
+>
+    <m:Page id="_IDGenPage1" title="Tendering-App">
+
+        <!-- ── Header ── -->
+        <m:VBox id="_IDGenVBox3" class="sapUiMediumMargin">
+            <m:HBox id="_IDGenHBox" justifyContent="SpaceBetween" alignItems="Center">
+                <m:Text id="_IDGenText11" text="{= 'Document Number: ' + ${/docNumber} + ' :: ' + ${/itemNumber} }"/>
+                <m:HBox id="_IDGenHBox1">
+                    <m:Button id="_IDGenButton2" text="Save Document" icon="sap-icon://save" type="Transparent" press=".onSaveDocument"/>
+                    <m:Button id="_IDGenButton3" text="Print"         icon="sap-icon://print" type="Transparent" press=".onPrint"/>
+                    <m:MenuButton id="_IDGenMenuButton1" text="Actions" buttonMode="Split">
+                        <m:menu>
+                            <m:Menu id="_IDGenMenu">
+                                <m:MenuItem id="_IDGenMenuItem"  text="Export" icon="sap-icon://download" press=".onExport"/>
+                                <m:MenuItem id="_IDGenMenuItem1" text="Import from Excel"  icon="sap-icon://upload"   press="._openExcelUploadDialogTendering"/>
+                                <m:MenuItem id="_IDGenMenuItemModel" text="Import from Model" icon="sap-icon://copy" press="._openModelImportDialog"/>
+                            </m:Menu>
+                        </m:menu>
+                    </m:MenuButton>
+                </m:HBox>
+            </m:HBox>
+
+            <!-- Total Value display -->
+            <m:HBox id="_IDGenHBox2" justifyContent="Center" alignItems="Center">
+                <m:VBox id="_IDGenVBox9"  class="myRectangle" alignItems="Center" justifyContent="Center">
+                    <m:Text id="_IDGenText12" text="Total Value:"/>
+                </m:VBox>
+                <m:VBox id="_IDGenVBox5"  class="myRectangle" alignItems="Center" justifyContent="Center">
+                    <m:Text id="_IDGenText13" text="{/totalValue}"/>
+                </m:VBox>
+                <m:VBox id="_IDGenVBox10" class="myRectangle" alignItems="Center" justifyContent="Center">
+                    <m:Text id="_IDGenText14" text="SAR"/>
+                </m:VBox>
+            </m:HBox>
+        </m:VBox>
+
+        <!-- ── Search + Profit Margin bar ── -->
+        <m:VBox id="_IDGenVBox4" class="sapUiMediumMargin">
+            <m:HBox id="_IDGenHBox4" class="sapUiSmallMarginTop" justifyContent="SpaceBetween" alignItems="Center">
+                <m:SearchField id="searchField" width="80%" placeholder="Search..." liveChange=".onSearch"/>
+                <m:HBox id="_IDGenHBox5">
+                    <m:Input  id="groupInput" type="Number" width="120px" placeholder="0"/>
+                    <m:Button id="_IDGenButton1" text="Apply ProfitMargin" type="Emphasized" press=".onApplyProfitMargin"/>
+                </m:HBox>
+            </m:HBox>
+        </m:VBox>
+
+        <!-- ── Tree Table ── -->
+        <m:VBox id="_IDGenVBox">
+            <m:ScrollContainer id="treeTableScrollContainer" width="100%" vertical="true" horizontal="true">
+                <TreeTable
+                    id="treeTable"
+                    rows="{path: '/MainItems', parameters: { arrayNames: ['subItemList'] }}"
+                    selectionMode="MultiToggle"
+                    rowHeight="40"
+                    width="2000px"
+                    enableColumnReordering="false"
+                    class="sapUiSizeCompact"
+                    visibleRowCountMode="Auto"
+                    expandFirstLevel="true"
+                    rowSelectionChange=".onRowSelectionChange"
+                >
+                    <extension>
+                        <m:OverflowToolbar id="_IDGenOverflowToolbar1" style="Clear" class="sapUiMediumMargin">
+                            <m:Button id="_IDGenButton9" text="Add Main Item" press=".onOpenMainDialog" type="Emphasized"/>
+                            <m:ToolbarSpacer id="_IDGenToolbarSpacer"/>
+                            <m:Button id="_IDGenButton6"  text="Collapse all"       press=".onCollapseAll"/>
+                            <m:Button id="_IDGenButton7"  text="Collapse selection"  press=".onCollapseSelection"/>
+                            <m:Button id="_IDGenButton10" text="Expand first level"  press=".onExpandFirstLevel"/>
+                            <m:Button id="_IDGenButton11" text="Expand selection"    press=".onExpandSelection"/>
+                            <!-- ═══════════════════════════════════════════
+                                 COST BUTTON — beside collapse/expand buttons
+                                 Enabled only when rows are selected
+                            ═══════════════════════════════════════════ -->
+                            <m:Button
+                                id="costButton"
+                                text="Cost"
+                                icon="sap-icon://money-bills"
+                                type="Emphasized"
+                                press=".onOpenCost"
+                                enabled="{costModel>/costButtonEnabled}"
+                                tooltip="Open cost simulation for selected items"
+                                class="sapUiTinyMarginBegin"/>
+                        </m:OverflowToolbar>
+                    </extension>
+
+                    <columns>
+                        <Column id="_IDGenColumn1" width="7%">
+                            <label><m:Text id="_IDGenText1" text="Service No"/></label>
+                            <template><m:Text id="_IDGenText2" text="{serviceNumberCode}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn2" width="10%">
+                            <label><m:Text id="_IDGenText3" text="Description"/></label>
+                            <template><m:Text id="_IDGenText4" text="{description}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn3" width="7%">
+                            <label><m:Text id="_IDGenText5" text="Quantity"/></label>
+                            <template><m:Text id="_IDGenText6" text="{quantity}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn4" width="8%">
+                            <label><m:Text id="_IDGenText7" text="UOM"/></label>
+                            <template><m:Text id="_IDGenText8" text="{unitOfMeasurementCode}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn11" width="10%">
+                            <label><m:Text id="_IDGenText24" text="Formula"/></label>
+                            <template><m:Text id="_IDGenText25" text="{formulaCode}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn5" width="8%">
+                            <label><m:Text id="_IDGenText9" text="Currency"/></label>
+                            <template><m:Text id="_IDGenText10" text="{currencyCode}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn6" width="10%">
+                            <label><m:Text id="_IDGenText15" text="AmountPerUnit"/></label>
+                            <template><m:Text id="_IDGenText16" text="{amountPerUnit}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn7" width="10%">
+                            <label><m:Text id="_IDGenText17" text="Total"/></label>
+                            <template><m:Text id="_IDGenText18" text="{total}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn8" width="10%">
+                            <label><m:Text id="_IDGenText19" text="ProfitMargin"/></label>
+                            <template><m:Text id="_IDGenText20" text="{profitMargin}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn13" width="12%">
+                            <label><m:Text id="_IDGenText29" text="AmountPerUnitWithProfit"/></label>
+                            <template><m:Text id="_IDGenText28" text="{amountPerUnitWithProfit}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn9" width="10%">
+                            <label><m:Text id="_IDGenText21" text="TotalWithProfit"/></label>
+                            <template><m:Text id="_IDGenText22" text="{totalWithProfit}"/></template>
+                        </Column>
+                        <Column id="_IDGenColumn10" width="10%">
+                            <label><m:Text id="_IDGenText23" text="Actions"/></label>
+                            <template>
+                                <m:HBox id="_IDGenHBox3">
+                                    <m:Button id="_IDGenButton16" icon="sap-icon://add"    type="Transparent" tooltip="Add Sub Item" press=".onOpenSubDialogForRow" visible="{= !!${subItemList} }"/>
+                                    <m:Button id="_IDGenButton12" icon="sap-icon://edit"   type="Transparent" tooltip="Edit"         press=".onEditRow"/>
+                                    <m:Button id="_IDGenButton15" icon="sap-icon://delete" type="Transparent" tooltip="Delete"       press=".onDeleteRow"/>
+                                </m:HBox>
+                            </template>
+                        </Column>
+                    </columns>
+                </TreeTable>
+            </m:ScrollContainer>
+        </m:VBox>
+
+        <!-- ════════════════════════════════════════════════════
+             ADD MAIN ITEM DIALOG
+        ════════════════════════════════════════════════════ -->
+        <m:Dialog id="addMainDialog" title="Add Main Item" contentWidth="800px" contentHeight="80%" resizable="true" draggable="true">
+            <f:SimpleForm id="mainItemForm" editable="true" layout="ResponsiveGridLayout" class="sapUiSmallMargin">
+                <f:content>
+
+                    <m:Label id="_IDGenLabel3" text="Main Item No"/>
+                    <m:Input id="mainItemNoInput" placeholder="Main Item No"/>
+
+                    <m:Label id="_IDGenLabel4" text="Service No"/>
+                    <m:Select id="mainServiceNoSelect" selectedKey="{/SelectedServiceNumber}" forceSelection="false"
+                              items="{path: '/ServiceNumbers'}" change=".onServiceNumberChange">
+                        <core:Item id="_IDGenItem1" key="{serviceNumberCode}" text="{description}"/>
+                    </m:Select>
+
+                    <m:Label id="_IDGenLabel5" text="Description"/>
+                    <m:Input id="mainDescriptionInput" placeholder="Description"/>
+
+                    <m:Label id="_IDGenLabel6" text="Quantity"/>
+                    <m:Input id="mainQuantityInput" placeholder="Quantity (or use formula below)"
+                             type="Number" liveChange=".onInputChange"/>
+
+                    <!-- ── Formula row ── -->
+                    <m:Label id="_IDGenLabel7" text="Formula"/>
+                    <m:HBox id="mainFormulaHBox" alignItems="Center" width="100%">
+                        <m:Select id="formulaSelect" forceSelection="false"
+                                  items="{path: '/Formulas'}" change=".onFormulaSelected">
+                            <m:layoutData>
+                                <m:FlexItemData id="flexHBox1" growFactor="1" baseSize="0" minWidth="0"/>
+                            </m:layoutData>
+                            <core:Item id="_IDGenItem9"  key="" text="— None (enter qty manually) —"/>
+                            <core:Item id="_IDGenItem2"  key="{formulaCode}" text="{description}"/>
+                        </m:Select>
+                        <m:Button id="btnClearFormula"
+                                  icon="sap-icon://decline"
+                                  type="Reject"
+                                  tooltip="Clear formula and unlock quantity"
+                                  visible="{/HasSelectedFormula}"
+                                  press=".onClearFormula"
+                                  class="sapUiTinyMarginBegin"/>
+                    </m:HBox>
+
+                    <m:Label id="_IDGenLabel8" text=""/>
+                    <m:Button id="btnParameters" text="Enter Parameters"
+                              enabled="{/HasSelectedFormula}" press=".onOpenFormulaDialog"/>
+
+                    <m:Label id="_IDGenLabel9" text="UOM"/>
+                    <m:Select id="mainUOMSelect" forceSelection="false" items="{path: '/UOM'}">
+                        <core:Item id="_IDGenItem3" key="{unitOfMeasurementCode}" text="{description}"/>
+                    </m:Select>
+
+                    <m:Label id="_IDGenLabel10" text="Currency"/>
+                    <m:Select id="mainCurrencySelect" forceSelection="false" items="{path: '/Currency'}">
+                        <core:Item id="_IDGenItem4" key="{currencyCode}" text="{description}"/>
+                    </m:Select>
+
+                    <m:Label id="_IDGenLabel11" text="Amount Per Unit"/>
+                    <m:Input id="mainAmountPerUnitInput" type="Number" placeholder="AmountPerUnit" liveChange=".onInputChange"/>
+
+                    <m:Label id="_IDGenLabel12" text="Total"/>
+                    <m:Input id="mainTotalInput" placeholder="Total" editable="false" value="{/Total}"/>
+
+                    <m:Label id="_IDGenLabel13" text="Profit Margin"/>
+                    <m:Input id="mainProfitMarginInput" placeholder="ProfitMargin" type="Number" liveChange=".onInputChange"/>
+
+                    <m:Label id="_IDGenLabel14" text="Amount/Unit with Profit"/>
+                    <m:Input id="mainAmountPerUnitWithProfitInput" placeholder="AmountPerUnitWithProfit"
+                             editable="false" value="{/amountPerUnitWithProfit}"/>
+
+                    <m:Label id="_IDGenLabel15" text="Total with Profit"/>
+                    <m:Input id="mainTotalWithProfitInput" placeholder="TotalWithProfit"
+                             editable="false" value="{/totalWithProfit}"/>
+
+                </f:content>
+            </f:SimpleForm>
+            <m:buttons>
+                <m:Button id="_IDGenButton4" text="Add"    type="Emphasized" press=".onAddMainItem"/>
+                <m:Button id="_IDGenButton5" text="Cancel" press=".onCloseDialog"/>
+            </m:buttons>
+        </m:Dialog>
+
+        <!-- Formula parameter dialog (main item) -->
+        <m:Dialog id="formulaDialog" title="Enter Formula Parameters" class="sapUiContentPadding">
+            <m:VBox id="formulaParamContainer"/>
+            <m:endButton>
+                <m:Button id="_IDGenButton21" text="OK" type="Emphasized" press=".onFormulaDialogOK"/>
+            </m:endButton>
+        </m:Dialog>
+
+        <!-- ════════════════════════════════════════════════════
+             ADD SUB ITEM DIALOG
+        ════════════════════════════════════════════════════ -->
+        <m:Dialog id="addSubDialog" title="Add Sub Item" contentWidth="800px" resizable="true" draggable="true">
+            <f:SimpleForm id="subItemForm" editable="true" layout="ResponsiveGridLayout" class="sapUiSmallMargin">
+                <f:content>
+
+                    <m:Label id="_IDGenLabel16" text="Main Item No (Parent)"/>
+                    <m:Input id="parentMainItemNoInput" editable="false"/>
+
+                    <m:Label id="_IDGenLabel17" text="Sub Item No"/>
+                    <m:Input id="subItemNoInput" placeholder="Sub Item No"/>
+
+                    <m:Label id="_IDGenLabel18" text="Service No"/>
+                    <m:Select id="subServiceNoInput" selectedKey="{/SelectedSubServiceNumber}" forceSelection="false"
+                              items="{path: '/ServiceNumbers'}" change=".onSubServiceNumberChange">
+                        <core:Item id="_IDGenItem5" key="{serviceNumberCode}" text="{description}"/>
+                    </m:Select>
+
+                    <m:Label id="_IDGenLabel19" text="Description"/>
+                    <m:Input id="subDescriptionInput" placeholder="Description"
+                             value="{/SelectedSubDescriptionText}" editable="{/SubDescriptionEditable}"/>
+
+                    <m:Label id="_IDGenLabel20" text="Quantity"/>
+                    <m:Input id="subQuantityInput" placeholder="Quantity (or use formula below)"
+                             type="Number" liveChange=".onSubInputChange"/>
+
+                    <m:Label id="_IDGenLabel21" text="UOM"/>
+                    <m:Select id="subUOMInput" forceSelection="false" items="{path: '/UOM'}">
+                        <core:Item id="_IDGenItem6" key="{unitOfMeasurementCode}" text="{description}"/>
+                    </m:Select>
+
+                    <!-- ── Sub formula row with Clear button ── -->
+                    <m:Label id="_IDGenLabel22" text="Formula (optional)"/>
+                    <m:HBox id="subFormulaHBox" alignItems="Center" width="100%">
+                        <m:Select id="subFormulaSelect" forceSelection="false"
+                                  items="{path: '/Formulas'}" change=".onFormulaSelected">
+                            <m:layoutData>
+                                <m:FlexItemData id="flexHBox" growFactor="1" baseSize="0" minWidth="0"/>
+                            </m:layoutData>
+                            <core:Item id="_IDGenItem7"  key="" text="— None (enter qty manually) —"/>
+                            <core:Item id="_IDGenItem7b" key="{formulaCode}" text="{description}"/>
+                        </m:Select>
+                        <m:Button id="btnClearSubFormula"
+                                  icon="sap-icon://decline"
+                                  type="Reject"
+                                  tooltip="Clear formula and unlock quantity"
+                                  visible="{/HasSelectedSubFormula}"
+                                  press=".onClearSubFormula"
+                                  class="sapUiTinyMarginBegin"/>
+                    </m:HBox>
+
+                    <m:Label id="_IDGenLabel23" text=""/>
+                    <m:Button id="btnSubParameters" text="Enter Parameters"
+                              enabled="{/HasSelectedSubFormula}" press=".onOpenFormulaDialog"/>
+
+                    <m:Label id="_IDGenLabel24" text="Amount Per Unit"/>
+                    <m:Input id="subAmountPerUnitInput" placeholder="AmountPerUnit"
+                             type="Number" liveChange=".onSubInputChange"/>
+
+                    <m:Label id="_IDGenLabel25" text="Currency"/>
+                    <m:Select id="subCurrencyInput" forceSelection="false" items="{path: '/Currency'}">
+                        <core:Item id="_IDGenItem8" key="{currencyCode}" text="{description}"/>
+                    </m:Select>
+
+                    <m:Label id="_IDGenLabel26" text="Total"/>
+                    <m:Input id="subTotalInput" placeholder="Total" editable="false" value="{/SubTotal}"/>
+
+                </f:content>
+            </f:SimpleForm>
+            <m:buttons>
+                <m:Button id="_IDGenButton13" text="Add"    type="Emphasized" press=".onAddSubItem"/>
+                <m:Button id="_IDGenButton14" text="Cancel" press=".onCancelSubDialog"/>
+            </m:buttons>
+        </m:Dialog>
+
+        <!-- Formula parameter dialog (sub item) -->
+        <m:Dialog id="SubFormulaDialog" title="Enter Formula Parameters" class="sapUiContentPadding">
+            <m:VBox id="subFormulaParamContainer"/>
+            <m:endButton>
+                <m:Button id="_IDGenButton22" text="OK" type="Emphasized" press=".onSubFormulaDialogOK"/>
+            </m:endButton>
+        </m:Dialog>
+
+        <!-- ════════════════════════════════════════════════════
+             IMPORT DIALOG
+        ════════════════════════════════════════════════════ -->
+        <m:Dialog id="importDialog" title="Import from Excel" contentWidth="500px" class="sapUiContentPadding">
+            <m:VBox id="_IDGenVBox7" class="sapUiSmallMargin">
+                <m:Label id="_IDGenLabel1" text="Select Excel file (.xlsx):"/>
+                <u:FileUploader id="fileUploader" fileType="XLSX,xlsx" uploadUrl="/upload" change=".onFileChange"/>
+                <m:Label id="importStatus" text=""/>
+            </m:VBox>
+            <m:buttons>
+                <m:Button id="_IDGenButton8"  text="Import" type="Emphasized" press=".onImportData" enabled="{importReady}"/>
+                <m:Button id="_IDGenButton17" text="Cancel" press=".onCloseImportDialog"/>
+            </m:buttons>
+        </m:Dialog>
+
+        <!-- ════════════════════════════════════════════════════
+             EXPORT CHOICE DIALOG
+        ════════════════════════════════════════════════════ -->
+        <m:Dialog id="exportChoiceDialog" title="Export Format" contentWidth="300px" class="sapUiContentPadding">
+            <m:VBox id="_IDGenVBox8" class="sapUiSmallMargin" alignItems="Center">
+                <m:Label id="_IDGenLabel27" text="Choose export format:"/>
+                <m:Button id="btnExportPDF"   text="PDF"          type="Emphasized"
+                          icon="sap-icon://pdf-attachment"   width="100%"
+                          press=".onExportPDF" class="sapUiMediumMarginBottom"/>
+                <m:Button id="btnExportExcel" text="Excel (.xlsx)"
+                          icon="sap-icon://excel-attachment" width="100%"
+                          press=".onExport"/>
+            </m:VBox>
+            <m:buttons>
+                <m:Button id="_IDGenButton18" text="Cancel" press=".onCloseExportDialog"/>
+            </m:buttons>
+        </m:Dialog>
+
+    </m:Page>
+</mvc:View>

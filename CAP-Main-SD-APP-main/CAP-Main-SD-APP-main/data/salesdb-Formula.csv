@@ -1,0 +1,6 @@
+formulaCode,formula,description,numberOfParameters,parameterIds,parameterDescriptions,testParameters,formulaLogic,expression,result,createdAt,createdBy,modifiedAt,modifiedBy
+1,F001,"Circumference of circle",1,"[""r""]","[""radius""]","[2,3,4]","22/7*r*2","2*3.14*r",12.56,2025-09-07T10:00:00Z,admin,2025-09-07T10:00:00Z,admin
+2,F002,"Area of circle",1,"[""r""]","[""radius""]","[5]","22/7*r**2","3.14*r*r",78.5,2025-09-07T10:05:00Z,admin,2025-09-07T10:05:00Z,admin
+3,F003,"Rectangle area",2,"[""l"",""w""]","[""length"",""width""]","[2,3]","l*w","l*w",6,2025-09-07T10:10:00Z,admin,2025-09-07T10:10:00Z,admin
+4,F004,"Triangle area",2,"[""b"",""h""]","[""base"",""height""]","[3,4]","0.5*b*h","0.5*b*h",6,2025-09-07T10:15:00Z,admin,2025-09-07T10:15:00Z,admin
+

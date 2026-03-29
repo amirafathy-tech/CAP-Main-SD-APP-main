@@ -1,0 +1,2 @@
+shortText,grossPrice,quantity,deletionIndicator,serviceText,biddersLine,supplementaryLine,lotSizeForCostingIsOne,currencyCode,materialGroupCode,serviceTypeCode,formulaCode,personnelNumberCode,lineTypeCode,unitOfMeasurementCode
+Safety fence,5000,20,false,service text,false,false,false,egp,"material group 1","service type 1",f1,"personnel number 1",nz,Gram

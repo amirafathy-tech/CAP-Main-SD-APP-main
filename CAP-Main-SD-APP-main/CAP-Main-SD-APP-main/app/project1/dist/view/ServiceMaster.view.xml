@@ -1,0 +1,144 @@
+<mvc:View
+    controllerName="project1.controller.ServiceMaster"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:sap.m="sap.m"
+    xmlns:f="sap.f"
+    xmlns:w="sap.ui.integration.widgets"
+    xmlns:tnt="sap.tnt"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:table="sap.ui.table"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:u="sap.ui.unified"
+    xmlns:macros="sap.fe.macros"
+>
+    <Page
+        id="_IDGenPage3"
+        title="Service Master"
+    >
+        <Panel id="_IDGenPanel6">
+            <HBox
+                id="_IDGenVBox"
+                class="sapUiSmallMargin"
+                justifyContent="Center"
+            >
+                <SearchField
+                    id="_IDGenSearchField"
+                    class="sapUiSmallMargin"
+                    width="55%"
+                    liveChange="onSearch"
+                />
+                <Button
+                    id="_IDGenButton23"
+                    text="Create"
+                    press="onNavigateToAddServiceMaster"
+                    class="sapUiSmallMargin"
+                    ariaDescribedBy="defaultButtonDescription genericButtonDescription"
+                />
+                <Button
+                    id="_IDGenButton9"
+                    text="Details"
+                    press="onShowDetails"
+                    class="sapUiSmallMargin"
+                    ariaDescribedBy="defaultButtonDescription genericButtonDescription"
+                />
+                <Button
+                    id="_IDGenButton10"
+                    text="Edit"
+                    press="onEdit"
+                    class="sapUiSmallMargin"
+                    ariaDescribedBy="defaultButtonDescription genericButtonDescription"
+                />
+                <Button 
+                id="_IDGenButton6"
+                    text="Delete"
+                    press="onDeletePress"
+                    class="sapUiSmallMargin"
+                    icon="sap-icon://delete"
+                    enabled="{= ${view>/ServiceNumbers}.length > 0 }"
+                     ariaDescribedBy="defaultButtonDescription genericButtonDescription"
+                />
+                <Button
+                    id="_IDGenButton11"
+                    text="Copy"
+                    press="onCopy"
+                    class="sapUiSmallMargin"
+                    ariaDescribedBy="defaultButtonDescription genericButtonDescription"
+                />
+                <Button
+                    id="_IDGenButton12"
+                    text="Export"
+                    press="onExport"
+                    class="sapUiSmallMargin"
+                    ariaDescribedBy="defaultButtonDescription genericButtonDescription"
+                />
+            </HBox>
+        </Panel>
+        <Table
+            id="serviceMaster"
+            items="{view>/ServiceNumbers}"
+            mode="SingleSelectMaster"
+        >
+            <columns>
+                <Column id="_IDGenColumn69">
+                    <Text
+                        id="_IDGenText81"
+                        text="Service Master Code"
+                    />
+                </Column>
+                <Column id="_IDGenColumn70">
+                    <Text
+                        id="_IDGenText82"
+                        text="Search Term"
+                    />
+                </Column>
+                <Column id="_IDGenColumn71">
+                    <Text
+                        id="_IDGenText83"
+                        text="Description"
+                    />
+                </Column>
+                <Column id="_IDGenColumn72">
+                    <Text
+                        id="_IDGenText84"
+                        text="Last Change Date"
+                    />
+                </Column>
+                <Column id="_IDGenColumn73">
+                    <Text
+                        id="_IDGenText85"
+                        text="Service Text"
+                    />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem id="_IDGenColumnListItem2">
+                    <cells>
+                        <Text
+                            id="_IDGenText86"
+                            text="{view>serviceNumberCode}"
+                        />
+                        <Text
+                            id="_IDGenText87"
+                            text="{view>searchTerm}"
+                        />
+                        <Text
+                            id="_IDGenText88"
+                            text="{view>description}"
+                        />
+                        <Text
+                            id="_IDGenText89"
+                            text="{view>lastChangeDate}"
+                        />
+                        <Text
+                            id="_IDGenText90"
+                            text="{view>serviceText}"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </Page>
+</mvc:View>

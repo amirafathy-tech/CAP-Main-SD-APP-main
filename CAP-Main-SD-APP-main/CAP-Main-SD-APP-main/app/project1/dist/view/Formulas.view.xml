@@ -1,0 +1,51 @@
+<mvc:View controllerName="project1.controller.Formulas"
+    xmlns="sap.m"
+     xmlns:mvc="sap.ui.core.mvc"
+      xmlns:sap.m="sap.m"
+    xmlns:f="sap.f"
+    xmlns:w="sap.ui.integration.widgets"
+    xmlns:tnt="sap.tnt"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:table="sap.ui.table"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+        xmlns:m="sap.m"
+        xmlns:u="sap.ui.unified"
+        	xmlns:macros="sap.fe.macros">
+    <Page id="_IDGenPage9" title="Formuals">
+
+    	<headerContent>
+			<Button id="_IDGenButton33" icon="sap-icon://add" tooltip="Add" text="New Formula" press="onNavigateToAddFormula" />
+		</headerContent>
+          <Table id="formulasTable" items="{path: '/Formulas'}">
+            <columns>
+                <Column id="_IDGenColumn19">
+                    <Text id="_IDGenText37" text="Code" />
+                </Column>
+                <Column id="_IDGenColumn20">
+                    <Text id="_IDGenText38" text="Description" />
+                </Column>
+               
+                <Column id="_IDGenColumn22">
+                    <Text id="_IDGenText40" text="Actions" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem id="_IDGenColumnListItem3">
+                    <cells>
+                    
+                        <Text id="_IDGenText41" text="{formula}" />
+                        <Text id="_IDGenText42" text="{description}" />
+                        <HBox id="_IDGenHBox20">
+                            <Button id="_IDGenButton34" icon="sap-icon://information" press="onDetails" />
+                            <Button id="_IDGenButton35" icon="sap-icon://delete" press="onDelete" />
+                        </HBox>
+                    </cells>
+                </ColumnListItem>
+            </items>
+            
+        </Table>
+      
+      
+    </Page>
+</mvc:View>

@@ -1,0 +1,23 @@
+/* Enter your custom styles here */
+.marginTop{
+    margin-top: 8px;
+}
+.marginEnd{
+    margin-right: 10px;
+}
+.marginStart{
+    margin-left: 50px;
+}
+.Center{
+    align-items: center;
+}
+.myRectangle {
+    border: 1px solid #d0d0d0;
+    background-color: #fafafa;
+    padding: 12px 24px;
+    margin: 2px;
+    min-width: 150px;   
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+}

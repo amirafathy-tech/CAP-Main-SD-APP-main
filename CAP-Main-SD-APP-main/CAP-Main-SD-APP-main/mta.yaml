@@ -1,0 +1,224 @@
+_schema-version: 3.3.0
+ID: Maramer-App
+description: A simple CAP project.
+version: 1.0.0
+
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+
+modules:
+  # =========================
+  # CAP SERVICE
+  # =========================
+  - name: Maramer-App-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: Maramer-App-db
+      - name: Maramer-auth
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+      instances: 1
+      memory: 256M
+      disk-quota: 512M
+    build-parameters:
+      builder: npm-ci
+
+  # =========================
+  # HANA DB DEPLOYER
+  # =========================
+  - name: Maramer-App-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: Maramer-App-db
+    parameters:
+      memory: 256M
+
+  # =========================
+  # DESTINATION CONTENT
+  # =========================
+  - name: Maramer-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: Maramer-App-destination-service
+        parameters:
+          content-target: true
+      - name: Maramer-App-repo-host
+        parameters:
+          service-key:
+            name: Maramer_html_repo_host-key
+      - name: Maramer-auth
+        parameters:
+          service-key:
+            name: Maramer-auth-key
+    parameters:
+      content:
+        instance:
+          destinations:
+            - Name: Maramer_approuter_Maramer_html_repo_host
+              ServiceInstanceName: Maramer-App-html5-service
+              ServiceKeyName: Maramer_html_repo_host-key
+              sap.cloud.service: Maramer-approuter
+
+            - Name: Maramer_approuter_Maramer_auth
+              Authentication: OAuth2UserTokenExchange
+              ServiceInstanceName: Maramer-auth
+              ServiceKeyName: Maramer-auth-key
+              sap.cloud.service: Maramer-approuter
+          existing_destinations_policy: ignore
+    build-parameters:
+      no-source: true
+
+  # =========================
+  # HTML5 APP CONTENT
+  # =========================
+  - name: Maramer-App-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: Maramer-App-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - name: project1
+          artifacts:
+            - project1.zip
+          target-path: resources/
+        - name: tendering
+          artifacts:
+            - tendering.zip
+          target-path: resources/
+        - name: execution
+          artifacts:
+            - execution.zip
+          target-path: resources/
+        - name: invoice
+          artifacts:
+            - invoice.zip
+          target-path: resources/
+
+  # =========================
+  # HTML5 UI MODULES (ALL 4 APPS)
+  # =========================
+  - name: project1
+    type: html5
+    path: app/project1
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+  - name: tendering
+    type: html5
+    path: app/tendering
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+  - name: execution
+    type: html5
+    path: app/execution
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+  - name: invoice
+    type: html5
+    path: app/invoice
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+resources:
+  # =========================
+  # HANA HDI CONTAINER
+  # =========================
+  - name: Maramer-App-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+
+  # =========================
+  # XSUAA
+  # =========================
+  - name: Maramer-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      config:
+        xsappname: MaramerApp
+        tenant-mode: dedicated
+
+  # =========================
+  # HTML5 REPO HOST
+  # =========================
+  - name: Maramer-App-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+      service-name: Maramer-App-html5-service
+
+  # =========================
+  # DESTINATION SERVICE
+  # =========================
+  - name: Maramer-App-destination-service
+    type: org.cloudfoundry.managed-service
+    requires:
+    - name: srv-api
+    parameters:
+      service: destination
+      service-plan: lite
+      service-name: Maramer-App-destination
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            destinations:
+              - Name: ui5
+                Type: HTTP
+                URL: https://ui5.sap.com
+                Authentication: NoAuthentication
+                ProxyType: Internet
+
+              - Name: Maramer-srv-api
+                Type: HTTP
+                Authentication: NoAuthentication
+                ProxyType: Internet
+                HTML5.DynamicDestination: true
+                HTML5.ForwardAuthToken: true
+                URL: ~{srv-api/srv-url}  
+            existing_destinations_policy: update
+        version: 1.0.0

@@ -1,0 +1,2 @@
+description,deletionIndicator,searchTerm,numberToBeConverted,convertedNumber,serviceTypeCode,materialGroupCode,baseUnitOfMeasurement,toBeConvertedUnitOfMeasurement,defaultUnitOfMeasurement,serviceText,shortTextChangeAllowed
+Service Number 1,false,number,20,2000,"service type 1","material group 1",Gram,Kilogram,Gram,service text,false
