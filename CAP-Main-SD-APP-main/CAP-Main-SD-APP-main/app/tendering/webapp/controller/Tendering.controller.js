@@ -69,7 +69,7 @@ sap.ui.define([
             oRouter.getRoute("tendering").attachPatternMatched(this._onRouteMatched, this);
 
             // ── Reference data fetches ──────────────────────────────────────────
-            fetch("/odata/v4/sales-cloud/ServiceNumbers")
+            fetch("./odata/v4/sales-cloud/ServiceNumbers")
                 .then(r => { if (!r.ok) throw new Error(r.statusText); return r.json(); })
                 .then(data => {
                     if (data && data.value) {
@@ -81,16 +81,16 @@ sap.ui.define([
                 })
                 .catch(err => console.error("Error fetching ServiceNumbers:", err));
 
-            fetch("/odata/v4/sales-cloud/Formulas")
+            fetch("./odata/v4/sales-cloud/Formulas")
                 .then(r => r.json())
                 .then(data => { oModel.setProperty("/Formulas", Array.isArray(data.value) ? data.value : []); oModel.refresh(true); })
                 .catch(err => { console.error("Error fetching Formulas:", err); MessageToast.show("Failed to load formulas."); });
 
-            fetch("/odata/v4/sales-cloud/UnitOfMeasurements")
+            fetch("./odata/v4/sales-cloud/UnitOfMeasurements")
                 .then(r => r.json())
                 .then(data => { oModel.setProperty("/UOM", Array.isArray(data.value) ? data.value : []); oModel.refresh(true); });
 
-            fetch("/odata/v4/sales-cloud/Currencies")
+            fetch("./odata/v4/sales-cloud/Currencies")
                 .then(r => r.json())
                 .then(function(data) {
                     var currency = Array.isArray(data.value) ? data.value : [];
@@ -108,7 +108,7 @@ sap.ui.define([
             oModel.setProperty("/docNumber", args.docNumber);
             oModel.setProperty("/itemNumber", args.itemNumber);
 
-            fetch("/odata/v4/sales-cloud/getInvoiceMainItemByReferenceIdAndItemNumber", {
+            fetch("./odata/v4/sales-cloud/getInvoiceMainItemByReferenceIdAndItemNumber", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ referenceId: args.docNumber, salesQuotationItem: args.itemNumber })
@@ -1102,7 +1102,7 @@ sap.ui.define([
                 invoiceMainItemCommands: cleanedItems
             };
 
-            fetch("/odata/v4/sales-cloud/saveOrUpdateMainItems", {
+            fetch("./odata/v4/sales-cloud/saveOrUpdateMainItems", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
@@ -1361,7 +1361,7 @@ sap.ui.define([
             var oMainModel = this.getView().getModel();
             var that = this;
 
-            fetch('/odata/v4/sales-cloud/ModelSpecifications')
+            fetch('./odata/v4/sales-cloud/ModelSpecifications')
                 .then(function (r) {
                     if (!r.ok) throw new Error('Failed to load model specs: ' + r.statusText);
                     return r.json();
@@ -1431,7 +1431,7 @@ sap.ui.define([
             var sModelCode     = oModelData.modelSpecCode;
             var sModelCurrency = oModelData.currencyCode || '';
 
-            fetch('/odata/v4/sales-cloud/ModelSpecificationsDetails?$filter=modelSpecifications_modelSpecCode eq ' + sModelCode)
+            fetch('./odata/v4/sales-cloud/ModelSpecificationsDetails?$filter=modelSpecifications_modelSpecCode eq ' + sModelCode)
                 .then(function (r) {
                     if (!r.ok) throw new Error('Failed to load model details: ' + r.statusText);
                     return r.json();

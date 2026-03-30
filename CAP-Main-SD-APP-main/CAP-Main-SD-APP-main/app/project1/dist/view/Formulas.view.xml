@@ -12,7 +12,7 @@
         xmlns:m="sap.m"
         xmlns:u="sap.ui.unified"
         	xmlns:macros="sap.fe.macros">
-    <Page id="_IDGenPage9" title="Formuals">
+    <Page id="_IDGenPage9" title="Formulas">
 
     	<headerContent>
 			<Button id="_IDGenButton33" icon="sap-icon://add" tooltip="Add" text="New Formula" press="onNavigateToAddFormula" />
@@ -37,8 +37,9 @@
                         <Text id="_IDGenText41" text="{formula}" />
                         <Text id="_IDGenText42" text="{description}" />
                         <HBox id="_IDGenHBox20">
-                            <Button id="_IDGenButton34" icon="sap-icon://information" press="onDetails" />
-                            <Button id="_IDGenButton35" icon="sap-icon://delete" press="onDelete" />
+                            <Button id="_IDGenButton34" icon="sap-icon://information" press="onDetails" tooltip="Details" />
+                            <Button icon="sap-icon://edit" press="onEdit" tooltip="Edit" />
+                            <Button id="_IDGenButton35" icon="sap-icon://delete" press="onDelete" tooltip="Delete" />
                         </HBox>
                     </cells>
                 </ColumnListItem>

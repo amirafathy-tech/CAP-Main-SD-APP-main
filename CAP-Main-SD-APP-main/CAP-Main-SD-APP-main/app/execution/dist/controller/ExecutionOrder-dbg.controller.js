@@ -45,7 +45,8 @@ sap.ui.define([
           if (data && data.value) {
             const ServiceNumbers = data.value.map(item => ({
               serviceNumberCode: item.serviceNumberCode,
-              description: item.description
+              description: item.description,
+              unitOfMeasurementCode: item.unitOfMeasurementCode || item.defaultUnitOfMeasurement || ""
             }));
             this.getView().getModel().setProperty("/ServiceNumbers", ServiceNumbers);
           }
@@ -546,8 +547,10 @@ sap.ui.define([
 
       oDialog.addContent(oTable);
 
-      // FIX: absolute path
-      fetch(`./odata/v4/sales-cloud/ModelSpecificationsDetails`)
+      // FIX: filter by modelSpecCode so only this model's services are returned.
+      // Without the $filter the backend returned ALL ModelSpecificationsDetails rows
+      // from every model, causing the dialog to show every service in the system.
+      fetch(`./odata/v4/sales-cloud/ModelSpecificationsDetails?$filter=modelSpecifications_modelSpecCode eq ${modelSpecCode}`)
         .then(response => response.json())
         .then(data => {
           var oModel = new sap.ui.model.json.JSONModel(data);

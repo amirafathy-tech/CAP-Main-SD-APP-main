@@ -81,7 +81,7 @@ sap.ui.define([
 
                             console.log("✅ Selected sales order:", sOrder);
 
-                            fetch(`/odata/v4/sales-cloud/findItemsBySalesOrder?salesOrder'${sOrder}'`, {
+                            fetch(`./odata/v4/sales-cloud/findItemsBySalesOrder?salesOrder'${sOrder}'`, {
                                 method: "GET",
                                 headers: { "Content-Type": "application/json" }
                             })

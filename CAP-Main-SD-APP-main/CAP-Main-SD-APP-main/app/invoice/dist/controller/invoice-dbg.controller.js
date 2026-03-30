@@ -176,10 +176,15 @@ sap.ui.define([
                   // Use ExecutionOrderMain's live cumulative fields so the row
                   // already reflects all previously saved invoices for this order.
                   quantity:               0,
-                  actualQuantity:         oData.actualQuantity  || 0,
-                  remainingQuantity:      oData.remainingQuantity || oData.totalQuantity,
-                  actualPercentage:       oData.actualPercentage || 0,
-                  totalHeader:            oData.totalHeader      || 0
+                  actualQuantity:          oData.actualQuantity  || 0,
+                  remainingQuantity:       oData.remainingQuantity || oData.totalQuantity,
+                  actualPercentage:        oData.actualPercentage || 0,
+                  totalHeader:             oData.totalHeader      || 0,
+                  // FIX: carry over-fulfillment settings from the execution order.
+                  // onSaveEdit sends these to calculateQuantities which enforces the
+                  // allowed-quantity ceiling (mirrors Spring Boot /quantities logic).
+                  overFulfillmentPercent:  oData.overFulfillmentPercent || 0,
+                  unlimitedOverFulfillment: !!oData.unlimitedOverFulfillment
                 });
 
 
@@ -576,7 +581,23 @@ sap.ui.define([
             new sap.m.CheckBox({ selected: "{/editRow/lotCostOne}", editable: false }),
 
             new sap.m.Label({ text: "Current Amount" }),
-            new sap.m.Input({ value: "{/editRow/total}", editable: false })
+            new sap.m.Input({ value: "{/editRow/total}", editable: false }),
+
+            // FIX: show over-fulfillment limits so the user knows the ceiling
+            // before entering a Current Quantity value.
+            new sap.m.Label({ text: "Over Fulfillment %" }),
+            new sap.m.Input({
+              value: "{/editRow/overFulfillmentPercent}",
+              editable: false,
+              tooltip: "Maximum additional quantity allowed as a % of Total Quantity"
+            }),
+
+            new sap.m.Label({ text: "Unlimited Over Fulfillment" }),
+            new sap.m.CheckBox({
+              selected: "{/editRow/unlimitedOverFulfillment}",
+              editable: false,
+              text: "No quantity limit enforced"
+            })
           ]
         });
 
@@ -636,7 +657,18 @@ sap.ui.define([
         body: JSON.stringify(payload)
       })
         .then(res => {
-          if (!res.ok) throw new Error("API request failed");
+          // FIX: extract the real CAP/backend error message (e.g.
+          // "Quantity exceeds allowed limit") instead of a generic string.
+          if (!res.ok) {
+            return res.json().then(function (errBody) {
+              var msg = (errBody && errBody.error && errBody.error.message)
+                ? errBody.error.message
+                : ("Server error: " + res.status);
+              throw new Error(msg);
+            }).catch(function () {
+              throw new Error("Server error: " + res.status);
+            });
+          }
           return res.json();
         })
         .then(result => {
@@ -670,7 +702,8 @@ sap.ui.define([
         })
         .catch(err => {
           console.error("Error calling calculateQuantities:", err);
-          sap.m.MessageToast.show("Failed to calculate quantities. Please try again.");
+          // FIX: show the actual backend message (e.g. over-fulfillment rejection)
+          sap.m.MessageBox.error(err.message || "Failed to calculate quantities. Please try again.");
         });
     },
     _onValueChange: function () {

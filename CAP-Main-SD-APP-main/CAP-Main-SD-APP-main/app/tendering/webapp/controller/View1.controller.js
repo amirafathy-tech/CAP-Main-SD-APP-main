@@ -81,7 +81,7 @@ sap.ui.define([
 
                             console.log("✅ Selected quotation:", sQuotation);
 
-                            fetch(`/odata/v4/sales-cloud/SalesQuotation('${sQuotation}')/items`, {
+                            fetch(`./odata/v4/sales-cloud/SalesQuotation('${sQuotation}')/items`, {
                                 method: "GET",
                                 headers: { "Content-Type": "application/json" }
                             })

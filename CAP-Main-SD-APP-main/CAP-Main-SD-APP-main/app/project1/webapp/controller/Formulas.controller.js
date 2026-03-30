@@ -24,7 +24,7 @@ sap.ui.define([
 
             // Fetch data from CAP OData service
             var oModel = new JSONModel();
-            fetch("/odata/v4/sales-cloud/Formulas")
+            fetch("./odata/v4/sales-cloud/Formulas")
                 .then(response => response.json())
                 .then(data => {
 
@@ -45,7 +45,7 @@ sap.ui.define([
 
         _loadFormulas: function () {
             var oModel = new sap.ui.model.json.JSONModel();
-            fetch("/odata/v4/sales-cloud/Formulas")
+            fetch("./odata/v4/sales-cloud/Formulas")
                 .then(response => response.json())
                 .then(data => {
                     oModel.setData({ Formulas: data.value });
@@ -196,7 +196,7 @@ sap.ui.define([
                 expression:            oData.formulaLogic || ""
             };
 
-            fetch("/odata/v4/sales-cloud/Formulas('" + oData.formulaCode + "')", {
+            fetch("./odata/v4/sales-cloud/Formulas('" + oData.formulaCode + "')", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(oPayload)
@@ -230,7 +230,7 @@ sap.ui.define([
                     title: "Confirm Deletion",
                     onClose: function (oAction) {
                         if (oAction === MessageBox.Action.OK) {
-                            fetch("/odata/v4/sales-cloud/Formulas('" + oItem.formulaCode + "')", {
+                            fetch("./odata/v4/sales-cloud/Formulas('" + oItem.formulaCode + "')", {
                                 method: "DELETE"
                             })
                                 .then(response => {

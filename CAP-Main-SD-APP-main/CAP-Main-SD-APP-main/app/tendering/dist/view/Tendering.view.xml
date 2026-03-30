@@ -23,7 +23,8 @@
                         <m:menu>
                             <m:Menu id="_IDGenMenu">
                                 <m:MenuItem id="_IDGenMenuItem"  text="Export" icon="sap-icon://download" press=".onExport"/>
-                                <m:MenuItem id="_IDGenMenuItem1" text="Import" icon="sap-icon://upload"   press="._openExcelUploadDialogTendering"/>
+                                <m:MenuItem id="_IDGenMenuItem1" text="Import from Excel"  icon="sap-icon://upload"   press="._openExcelUploadDialogTendering"/>
+                                <m:MenuItem id="_IDGenMenuItemModel" text="Import from Model" icon="sap-icon://copy" press="._openModelImportDialog"/>
                             </m:Menu>
                         </m:menu>
                     </m:MenuButton>

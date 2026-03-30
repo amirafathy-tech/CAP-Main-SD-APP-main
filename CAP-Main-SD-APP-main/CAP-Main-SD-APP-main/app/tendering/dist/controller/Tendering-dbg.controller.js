@@ -1352,6 +1352,178 @@ sap.ui.define([
         },
 
         // ─── IMPORT / EXPORT ──────────────────────────────────────────────────
+        // ─── IMPORT FROM MODEL ────────────────────────────────────────────
+        /**
+         * Step 1: shows all ModelSpecifications for the user to pick one.
+         * Mirrors Spring Boot GET /modelspecs.
+         */
+        _openModelImportDialog: function () {
+            var oMainModel = this.getView().getModel();
+            var that = this;
+
+            fetch('./odata/v4/sales-cloud/ModelSpecifications')
+                .then(function (r) {
+                    if (!r.ok) throw new Error('Failed to load model specs: ' + r.statusText);
+                    return r.json();
+                })
+                .then(function (data) {
+                    var aModels = Array.isArray(data.value) ? data.value : [];
+                    if (!aModels.length) { MessageToast.show('No model specifications found.'); return; }
+
+                    var oListModel = new sap.ui.model.json.JSONModel({ models: aModels });
+                    var oTable = new sap.m.Table({
+                        mode: 'SingleSelectMaster',
+                        columns: [
+                            new sap.m.Column({ header: new sap.m.Text({ text: 'Code' }),        width: '80px' }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: 'Description' }) }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: 'Currency' }),    width: '80px' })
+                        ],
+                        items: {
+                            path: '/models',
+                            template: new sap.m.ColumnListItem({
+                                type: 'Active',
+                                cells: [
+                                    new sap.m.Text({ text: '{modelSpecCode}' }),
+                                    new sap.m.Text({ text: '{description}' }),
+                                    new sap.m.Text({ text: '{currencyCode}' })
+                                ]
+                            })
+                        }
+                    });
+                    oTable.setModel(oListModel);
+
+                    var oDialog = new sap.m.Dialog({
+                        title: 'Select Model Specification',
+                        contentWidth: '500px',
+                        content: [oTable],
+                        beginButton: new sap.m.Button({
+                            text: 'Next', type: 'Emphasized',
+                            press: function () {
+                                var oSel = oTable.getSelectedItem();
+                                if (!oSel) { MessageToast.show('Please select a model.'); return; }
+                                var oModelData = oSel.getBindingContext().getObject();
+                                oDialog.close(); oDialog.destroy();
+                                that._openModelDetailDialog(oModelData, oMainModel);
+                            }
+                        }),
+                        endButton: new sap.m.Button({ text: 'Cancel', press: function () { oDialog.close(); oDialog.destroy(); } })
+                    });
+                    that.getView().addDependent(oDialog);
+                    oDialog.open();
+                })
+                .catch(function (err) {
+                    console.error('Error loading model specs:', err);
+                    MessageToast.show('Failed to load model specifications.');
+                });
+        },
+
+        /**
+         * Step 2: shows the detail lines for the chosen model (multi-select).
+         * Maps ModelSpecificationsDetails fields → InvoiceMainItem:
+         *   shortText           → description
+         *   serviceNumberCode   → serviceNumberCode
+         *   quantity            → quantity
+         *   grossPrice          → amountPerUnit
+         *   unitOfMeasurementCode, formulaCode, currencyCode (falls back to parent model)
+         */
+        _openModelDetailDialog: function (oModelData, oMainModel) {
+            var that = this;
+            var sModelCode     = oModelData.modelSpecCode;
+            var sModelCurrency = oModelData.currencyCode || '';
+
+            fetch('./odata/v4/sales-cloud/ModelSpecificationsDetails?$filter=modelSpecifications_modelSpecCode eq ' + sModelCode)
+                .then(function (r) {
+                    if (!r.ok) throw new Error('Failed to load model details: ' + r.statusText);
+                    return r.json();
+                })
+                .then(function (data) {
+                    var aDetails = Array.isArray(data.value) ? data.value : [];
+                    if (!aDetails.length) { MessageToast.show('No detail lines found for this model.'); return; }
+
+                    var oDetailModel = new sap.ui.model.json.JSONModel({ details: aDetails });
+                    var oDetailTable = new sap.m.Table({
+                        mode: 'MultiSelect',
+                        columns: [
+                            new sap.m.Column({ header: new sap.m.Text({ text: 'Service No' }), width: '80px' }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: 'Description' }) }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: 'Qty' }),      width: '60px' }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: 'UOM' }),      width: '70px' }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: 'Price' }),    width: '80px' }),
+                            new sap.m.Column({ header: new sap.m.Text({ text: 'Currency' }), width: '80px' })
+                        ],
+                        items: {
+                            path: '/details',
+                            template: new sap.m.ColumnListItem({
+                                type: 'Active',
+                                cells: [
+                                    new sap.m.Text({ text: '{serviceNumberCode}' }),
+                                    new sap.m.Text({ text: '{shortText}' }),
+                                    new sap.m.Text({ text: '{quantity}' }),
+                                    new sap.m.Text({ text: '{unitOfMeasurementCode}' }),
+                                    new sap.m.Text({ text: '{grossPrice}' }),
+                                    new sap.m.Text({ text: '{currencyCode}' })
+                                ]
+                            })
+                        }
+                    });
+                    oDetailTable.setModel(oDetailModel);
+
+                    var oDetailDialog = new sap.m.Dialog({
+                        title: 'Select Lines from: ' + (oModelData.description || sModelCode),
+                        contentWidth: '700px',
+                        content: [oDetailTable],
+                        beginButton: new sap.m.Button({
+                            text: 'Add Selected', type: 'Emphasized',
+                            press: function () {
+                                var aSelected = oDetailTable.getSelectedItems();
+                                if (!aSelected.length) { MessageToast.show('Please select at least one line.'); return; }
+
+                                var aItems = oMainModel.getProperty('/MainItems') || [];
+                                aSelected.forEach(function (oItem) {
+                                    var d   = oItem.getBindingContext().getObject();
+                                    var qty = parseFloat(d.quantity)  || 0;
+                                    var amt = parseFloat(d.grossPrice) || 0;
+                                    var tot = qty * amt;
+                                    aItems.push({
+                                        salesQuotation:          oMainModel.getProperty('/docNumber'),
+                                        salesQuotationItem:      oMainModel.getProperty('/itemNumber'),
+                                        pricingProcedureStep:    '1',
+                                        pricingProcedureCounter: '10',
+                                        customerNumber:          '120000',
+                                        invoiceMainItemCode:     Date.now().toString() + Math.random(),
+                                        serviceNumberCode:       '',  // ModelSpecificationsDetails.serviceNumberCode is Integer; InvoiceMainItem expects UUID — omit to avoid 400
+                                        description:             d.shortText               || '',
+                                        quantity:                qty,
+                                        unitOfMeasurementCode:   d.unitOfMeasurementCode   || '',
+                                        formulaCode:             d.formulaCode             || '',
+                                        currencyCode:            d.currencyCode || sModelCurrency,
+                                        amountPerUnit:           amt,
+                                        total:                   tot.toFixed(3),
+                                        profitMargin:            0,
+                                        amountPerUnitWithProfit: amt.toFixed(3),
+                                        totalWithProfit:         tot.toFixed(3),
+                                        subItemList:             []
+                                    });
+                                });
+
+                                oMainModel.setProperty('/MainItems', aItems);
+                                that._recalculateTotalValue();
+                                oMainModel.refresh(true);
+                                MessageToast.show(aSelected.length + ' line(s) imported from model.');
+                                oDetailDialog.close(); oDetailDialog.destroy();
+                            }
+                        }),
+                        endButton: new sap.m.Button({ text: 'Cancel', press: function () { oDetailDialog.close(); oDetailDialog.destroy(); } })
+                    });
+                    that.getView().addDependent(oDetailDialog);
+                    oDetailDialog.open();
+                })
+                .catch(function (err) {
+                    console.error('Error loading model details:', err);
+                    MessageToast.show('Failed to load model detail lines.');
+                });
+        },
+
         _openExcelUploadDialogTendering: function () {
             var selectedFile;
             var oMainModel = this.getView().getModel();

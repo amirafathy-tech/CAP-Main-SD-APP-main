@@ -36,7 +36,7 @@ sap.ui.define([
       this.getView().setModel(oModel);
 
       // FIX: absolute paths so cds-plugin-ui5 mount prefix doesn't interfere
-      fetch("/odata/v4/sales-cloud/ServiceNumbers")
+      fetch("./odata/v4/sales-cloud/ServiceNumbers")
         .then(response => {
           if (!response.ok) throw new Error(response.statusText);
           return response.json();
@@ -53,7 +53,7 @@ sap.ui.define([
         })
         .catch(err => console.error("Error fetching ServiceNumbers:", err));
 
-      fetch("/odata/v4/sales-cloud/UnitOfMeasurements")
+      fetch("./odata/v4/sales-cloud/UnitOfMeasurements")
         .then(r => r.json())
         .then(data => {
           if (data && data.value) {
@@ -66,7 +66,7 @@ sap.ui.define([
           }
         });
 
-      fetch("/odata/v4/sales-cloud/ServiceTypes")
+      fetch("./odata/v4/sales-cloud/ServiceTypes")
         .then(response => {
           if (!response.ok) throw new Error(response.statusText);
           return response.json();
@@ -82,7 +82,7 @@ sap.ui.define([
         })
         .catch(err => console.error("Error fetching ServiceTypes:", err));
 
-      fetch("/odata/v4/sales-cloud/MaterialGroups")
+      fetch("./odata/v4/sales-cloud/MaterialGroups")
         .then(response => {
           if (!response.ok) throw new Error(response.statusText);
           return response.json();
@@ -98,7 +98,7 @@ sap.ui.define([
         })
         .catch(err => console.error("Error fetching MaterialGroups:", err));
 
-      fetch("/odata/v4/sales-cloud/Currencies")
+      fetch("./odata/v4/sales-cloud/Currencies")
         .then(response => {
           if (!response.ok) throw new Error(response.statusText);
           return response.json();
@@ -129,7 +129,7 @@ sap.ui.define([
       oModel.setProperty("/itemNumber", itemNumber);
 
       // FIX: absolute path
-      var sUrl = `/odata/v4/sales-cloud/getExecutionOrderMainByReferenceId?referenceId='${docNumber}'&salesOrderItem='${itemNumber}'`;
+      var sUrl = `./odata/v4/sales-cloud/getExecutionOrderMainByReferenceId?referenceId='${docNumber}'&salesOrderItem='${itemNumber}'`;
 
       fetch(sUrl, {
         method: "GET",
@@ -344,7 +344,7 @@ sap.ui.define([
       // A_SalesOrderItem/to_SalesOrder to get ReferenceSDDocument from the header.
       var fnLoadQuotationItems = function (referenceId) {
         console.log("fetchByReferenceId:", { referenceId: referenceId });
-        fetch("/odata/v4/sales-cloud/fetchByReferenceId", {
+        fetch("./odata/v4/sales-cloud/fetchByReferenceId", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ referenceId: referenceId })
@@ -378,7 +378,7 @@ sap.ui.define([
         // returns the sales order HEADER, and the header has ReferenceSDDocument.
         var sSalesOrder   = oModel.getProperty("/docNumber") || "";
         var sSalesOrderItem = oModel.getProperty("/itemNumber") || "";
-        fetch("/odata/v4/sales-cloud/findBySalesOrderAndItem?salesOrder='"
+        fetch("./odata/v4/sales-cloud/findBySalesOrderAndItem?salesOrder='"
               + sSalesOrder + "'&salesOrderItem='" + sSalesOrderItem + "'")
           .then(function (r) { return r.json(); })
           .then(function (data) {
@@ -433,7 +433,7 @@ sap.ui.define([
       oDialog.addContent(oTable);
 
       // FIX: absolute path
-      fetch("/odata/v4/sales-cloud/ModelSpecifications")
+      fetch("./odata/v4/sales-cloud/ModelSpecifications")
         .then(response => response.json())
         .then(data => {
           var oModel = new sap.ui.model.json.JSONModel(data);
@@ -550,7 +550,7 @@ sap.ui.define([
       // FIX: filter by modelSpecCode so only this model's services are returned.
       // Without the $filter the backend returned ALL ModelSpecificationsDetails rows
       // from every model, causing the dialog to show every service in the system.
-      fetch(`/odata/v4/sales-cloud/ModelSpecificationsDetails?$filter=modelSpecifications_modelSpecCode eq ${modelSpecCode}`)
+      fetch(`./odata/v4/sales-cloud/ModelSpecificationsDetails?$filter=modelSpecifications_modelSpecCode eq ${modelSpecCode}`)
         .then(response => response.json())
         .then(data => {
           var oModel = new sap.ui.model.json.JSONModel(data);
@@ -1005,7 +1005,7 @@ sap.ui.define([
       console.log("Payload sent to API:", JSON.stringify(body, null, 2));
 
       // FIX: absolute path — remove leading ./ to avoid /execution/ prefix being prepended
-      fetch("/odata/v4/sales-cloud/saveOrUpdateExecutionOrders", {
+      fetch("./odata/v4/sales-cloud/saveOrUpdateExecutionOrders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
