@@ -285,9 +285,10 @@ sap.ui.define([
                   totalQuantity: oData.quantity,       // FIX: was actualQuantity — wrong field
                   actualQuantity: 0,                   // starts at 0; user fills in during execution
                   unitOfMeasurementCode: oData.unitOfMeasurementCode,
-                  amountPerUnit: oData.amountPerUnit,
+                  amountPerUnit: oData.amountPerUnitWithProfit ? oData.amountPerUnitWithProfit : oData.amountPerUnit,
                   currencyCode: oData.currencyCode,
-                  total: oData.quantity * oData.amountPerUnit
+                  total: oData.amountPerUnitWithProfit ? oData.quantity * oData.amountPerUnitWithProfit : oData.quantity * oData.amountPerUnit 
+                  //oData.quantity * oData.amountPerUnit
                 });
               });
 
