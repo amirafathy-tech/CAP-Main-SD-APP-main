@@ -76,6 +76,8 @@ sap.ui.define([
                     if (data && data.value) {
                         const personnelNumbers = data.value.map(item => ({
                             serviceNumberCode: item.serviceNumberCode,
+                            personnelNumberCode: item.personnelNumberCode,
+                            code: item.code,
                             description: item.description
                         }));
                         this.getView().getModel().setProperty("/personnelNumbers", personnelNumbers);
@@ -97,6 +99,8 @@ sap.ui.define([
                     if (data && data.value) {
                         const ServiceTypes = data.value.map(item => ({
                             serviceNumberCode: item.serviceNumberCode,
+                            serviceTypeCode: item.serviceTypeCode,
+                            serviceId: item.serviceId,
                             description: item.description
                         }));
                         this.getView().getModel().setProperty("/ServiceTypes", ServiceTypes);
@@ -118,6 +122,8 @@ sap.ui.define([
                     if (data && data.value) {
                         const LineTypes = data.value.map(item => ({
                             serviceNumberCode: item.serviceNumberCode,
+                            lineTypeCode: item.lineTypeCode,
+                            code: item.code,
                             description: item.description
                         }));
                         this.getView().getModel().setProperty("/LineTypes", LineTypes);
@@ -169,6 +175,7 @@ sap.ui.define([
                     if (data && data.value) {
                         const MatGroups = data.value.map(item => ({
                             materialGroupCode: item.materialGroupCode,
+                            code: item.code,
                             description: item.description
                         }));
                         this.getView().getModel().setProperty("/MatGroups", MatGroups);
@@ -799,16 +806,15 @@ sap.ui.define([
                             new sap.m.Input({ type: "Number", value: "{editModel>/netValue}", editable: false }),
 
                             new sap.m.Label({ text: "Formula" }),
-                            new sap.m.Select({
+                            new sap.m.ComboBox({
                                 selectedKey: "{editModel>/formulaCode}",
-                                change: function (oEvent) {
+                                selectionChange: function (oEvent) {
                                     var oModel = this._oEditDialog.getModel("editModel");
                                     var oSelectedItem = oEvent.getParameter("selectedItem");
-                                    // Store description text (same as what DB holds)
                                     var text = oSelectedItem ? oSelectedItem.getText() : "";
                                     oModel.setProperty("/formulaCode", text);
                                 }.bind(this),
-                                items: { path: "/Formulas", template: new sap.ui.core.Item({ key: "{description}", text: "{description}" }) }
+                                items: { path: "/Formulas", template: new sap.ui.core.Item({ key: "{description}", text: { parts: ["formula", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
                             new sap.m.Button({
                                 text: "Enter Parameters", press: this.onOpenEditFormulaDialog.bind(this)
@@ -817,28 +823,26 @@ sap.ui.define([
                             }),
 
                             new sap.m.Label({ text: "UOM" }),
-                            new sap.m.Select({
+                            new sap.m.ComboBox({
                                 selectedKey: "{editModel>/unitOfMeasurementCode}",
-                                change: function (oEvent) {
+                                selectionChange: function (oEvent) {
                                     var oModel = this._oEditDialog.getModel("editModel");
                                     var oSelectedItem = oEvent.getParameter("selectedItem");
-                                    // Store description text (same as what DB holds)
                                     var text = oSelectedItem ? oSelectedItem.getText() : "";
                                     oModel.setProperty("/unitOfMeasurementCode", text);
                                 }.bind(this),
-                                items: { path: "/UOM", template: new sap.ui.core.Item({ key: "{description}", text: "{description}" }) }
+                                items: { path: "/UOM", template: new sap.ui.core.Item({ key: "{description}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
                             new sap.m.Label({ text: "Currency" }),
-                            new sap.m.Select({
+                            new sap.m.ComboBox({
                                 selectedKey: "{editModel>/currencyCode}",
-                                change: function (oEvent) {
+                                selectionChange: function (oEvent) {
                                     var oModel = this._oEditDialog.getModel("editModel");
                                     var oSelectedItem = oEvent.getParameter("selectedItem");
-                                    // Store description text (same as what DB holds)
                                     var text = oSelectedItem ? oSelectedItem.getText() : "";
                                     oModel.setProperty("/currencyCode", text);
                                 }.bind(this),
-                                items: { path: "/Currency", template: new sap.ui.core.Item({ key: "{description}", text: "{description}" }) }
+                                items: { path: "/Currency", template: new sap.ui.core.Item({ key: "{description}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
                             new sap.m.Label({ text: "OverF.Percentage" }),
                             new sap.m.Input({ type: "Number", value: "{editModel>/overFulfilmentPercentage}" }),
@@ -853,15 +857,15 @@ sap.ui.define([
                             new sap.m.Input({ type: "Number", value: "{editModel>/pricePerUnitOfMeasurement}" }),
 
                             new sap.m.Label({ text: "Mat Group" }),
-                            new sap.m.Select({
+                            new sap.m.ComboBox({
                                 selectedKey: "{editModel>/materialGroupCode}",
-                                items: { path: "/MatGroups", template: new sap.ui.core.Item({ key: "{materialGroupCode}", text: "{description}" }) }
+                                items: { path: "/MatGroups", template: new sap.ui.core.Item({ key: "{materialGroupCode}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
 
                             new sap.m.Label({ text: "Service Type" }),
-                            new sap.m.Select({
+                            new sap.m.ComboBox({
                                 selectedKey: "{editModel>/serviceTypeCode}",
-                                items: { path: "/ServiceTypes", template: new sap.ui.core.Item({ key: "{serviceTypeCode}", text: "{description}" }) }
+                                items: { path: "/ServiceTypes", template: new sap.ui.core.Item({ key: "{serviceTypeCode}", text: { parts: ["serviceId", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
 
                             new sap.m.Label({ text: "External Service No" }),
@@ -874,15 +878,15 @@ sap.ui.define([
                             new sap.m.Input({ value: "{editModel>/lineText}" }),
 
                             new sap.m.Label({ text: "Personnel Number" }),
-                            new sap.m.Select({
+                            new sap.m.ComboBox({
                                 selectedKey: "{editModel>/personnelNumberCode}",
-                                items: { path: "/personnelNumbers", template: new sap.ui.core.Item({ key: "{personnelNumberCode}", text: "{description}" }) }
+                                items: { path: "/personnelNumbers", template: new sap.ui.core.Item({ key: "{personnelNumberCode}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
 
                             new sap.m.Label({ text: "Line Types" }),
-                            new sap.m.Select({
+                            new sap.m.ComboBox({
                                 selectedKey: "{editModel>/lineTypeCode}",
-                                items: { path: "/LineTypes", template: new sap.ui.core.Item({ key: "{lineTypeCode}", text: "{description}" }) }
+                                items: { path: "/LineTypes", template: new sap.ui.core.Item({ key: "{lineTypeCode}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
 
                             new sap.m.Label({ text: "Line Number" }),

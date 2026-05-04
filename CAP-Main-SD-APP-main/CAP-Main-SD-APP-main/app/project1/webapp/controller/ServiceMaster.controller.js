@@ -8,8 +8,9 @@ sap.ui.define([
     "sap/ui/export/library",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageBox",
+    "sap/m/MessageToast",
 
-], function (Controller, Dialog, VBox, Text, Button, Spreadsheet, exportLibrary, JSONModel, MessageBox) {
+], function (Controller, Dialog, VBox, Text, Button, Spreadsheet, exportLibrary, JSONModel, MessageBox, MessageToast) {
     "use strict";
     return Controller.extend("project1.controller.ServiceMaster", {
         onInit: function () {
@@ -68,7 +69,7 @@ sap.ui.define([
                 });
 
             // Material Groups
-            fetch("./odata/v4/sales-cloud/ServiceTypesMaterialGroups")
+            fetch("./odata/v4/sales-cloud/MaterialGroups")
                 .then(res => res.json())
                 .then(data => {
                     var oModel = new sap.ui.model.json.JSONModel(data.value);
@@ -237,8 +238,8 @@ sap.ui.define([
                     items: {
                         path: "unitsOfMeasurement>/",
                         template: new sap.ui.core.Item({
-                            key: "{units>code}",
-                            text: "{units>description}"
+                            key: "{unitsOfMeasurement>code}",
+                            text: "{unitsOfMeasurement>description}"
                         })
                     },
                     selectedKey: "{editModel>/editData/baseUnitOfMeasurement}"
@@ -253,8 +254,8 @@ sap.ui.define([
                     items: {
                         path: "unitsOfMeasurement>/",
                         template: new sap.ui.core.Item({
-                            key: "{units>code}",
-                            text: "{units>description}"
+                            key: "{unitsOfMeasurement>code}",
+                            text: "{unitsOfMeasurement>description}"
                         })
                     },
                     selectedKey: "{editModel>/editData/toBeConvertedUnitOfMeasurement}",
@@ -270,8 +271,8 @@ sap.ui.define([
                     items: {
                         path: "unitsOfMeasurement>/",
                         template: new sap.ui.core.Item({
-                            key: "{units>code}",
-                            text: "{units>description}"
+                            key: "{unitsOfMeasurement>code}",
+                            text: "{unitsOfMeasurement>description}"
                         })
                     },
                     selectedKey: "{editModel>/editData/defaultUnitOfMeasurement}",
@@ -594,7 +595,8 @@ sap.ui.define([
                         path: "serviceTypes>/",
                         template: new sap.ui.core.Item({
                             key: "{serviceTypes>serviceTypeCode}",
-                            text: "{serviceTypes>description}"
+                            text:"{= ${serviceTypes>serviceId} + ' - ' + ${serviceTypes>description} }"
+                            
                         })
                     },
                     selectedKey: "{copyModel>/copyData/serviceTypeCode}"
@@ -607,7 +609,8 @@ sap.ui.define([
                         path: "materialGroups>/",
                         template: new sap.ui.core.Item({
                             key: "{materialGroups>materialGroupCode}",
-                            text: "{materialGroups>description}"
+                            text:"{= ${materialGroups>code} + ' - ' + ${materialGroups>description} }"
+                          
                         })
                     },
                     selectedKey: "{copyModel>/copyData/materialGroupCode}"
@@ -619,8 +622,9 @@ sap.ui.define([
                     items: {
                         path: "unitsOfMeasurement>/",
                         template: new sap.ui.core.Item({
-                            key: "{units>code}",
-                            text: "{units>description}"
+                            key: "{unitsOfMeasurement>code}",
+                             text:"{= ${unitsOfMeasurement>code} + ' - ' + ${unitsOfMeasurement>description} }"
+                            
                         })
                     },
                     selectedKey: "{copyModel>/copyData/baseUnitOfMeasurement}"
@@ -636,8 +640,8 @@ sap.ui.define([
                     items: {
                         path: "unitsOfMeasurement>/",
                         template: new sap.ui.core.Item({
-                            key: "{units>code}",
-                            text: "{units>description}"
+                           key: "{unitsOfMeasurement>code}",
+                             text:"{= ${unitsOfMeasurement>code} + ' - ' + ${unitsOfMeasurement>description} }"
                         })
                     },
                     selectedKey: "{copyModel>/copyData/toBeConvertedUnitOfMeasurement}",
@@ -654,8 +658,8 @@ sap.ui.define([
                     items: {
                         path: "unitsOfMeasurement>/",
                         template: new sap.ui.core.Item({
-                            key: "{units>code}",
-                            text: "{units>description}"
+                              key: "{unitsOfMeasurement>code}",
+                             text:"{= ${unitsOfMeasurement>code} + ' - ' + ${unitsOfMeasurement>description} }"
                         })
                     },
                     selectedKey: "{copyModel>/copyData/defaultUnitOfMeasurement}",
@@ -835,13 +839,16 @@ sap.ui.define([
                 onClose: function (sAction) {
                     if (sAction === MessageBox.Action.OK) {
                         // Send DELETE request
-                        fetch(`./odata/v4/sales-cloud/ServiceNumbers('${(sServiceNumberCode)}')`, {
-                            method: "DELETE",
-                            headers: { "Content-Type": "application/json" }
+                        fetch(`./odata/v4/sales-cloud/ServiceNumbers(${sServiceNumberCode})`, {
+                            method: "DELETE"
                         })
                             .then(response => {
                                 if (!response.ok) {
-                                    return response.json().then(e => { throw new Error(e.error?.message || response.statusText); });
+                                    return response.text().then(text => {
+                                        let message = response.statusText;
+                                        try { if (text) message = JSON.parse(text).error?.message || message; } catch (_) {}
+                                        throw new Error(message);
+                                    });
                                 }
                                 MessageToast.show("Service Master deleted successfully!");
 

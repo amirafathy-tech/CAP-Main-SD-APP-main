@@ -609,19 +609,18 @@
                         id="_IDGenLabel28"
                         text="Service.No"
                     />
-                    <m:Select
+                    <m:ComboBox
                         id="mainModelServiceNoSelect"
                         selectedKey="{/SelectedServiceNumber}"
-                        forceSelection="false"
                         items="{path: '/ServiceNumbers'}"
                         change=".onServiceNumberChange"
                     >
                         <core:Item
                             id="_IDGenItem14"
                             key="{serviceNumberCode}"
-                            text="{description}"
+                            text="{= ${serviceNumberCode} + ' - ' + ${description} }"
                         />
-                    </m:Select>
+                    </m:ComboBox>
                     <m:Label
                         id="_IDGenLabel25"
                         text="Short Text"
@@ -665,18 +664,17 @@
                         id="_IDGenLabel30"
                         text="Formula"
                     />
-                    <m:Select
+                    <m:ComboBox
                         id="formulaSelect"
-                        forceSelection="false"
                         items="{path: '/Formulas'}"
                         change="onFormulaSelected"
                     >
                         <core:Item
                             id="_IDGenItem11"
                             key="{formulaCode}"
-                            text="{description}"
+                            text="{= ${formula} + ' - ' + ${description} }"
                         />
-                    </m:Select>
+                    </m:ComboBox>
                     <m:Label
                         id="_IDGenLabel31"
                         text=""
@@ -691,31 +689,29 @@
                         id="_IDGenLabel32"
                         text="UOM"
                     />
-                    <m:Select
+                    <m:ComboBox
                         id="mainUOMSelect"
-                        forceSelection="false"
                         items="{path: '/UOM'}"
                     >
                         <core:Item
                             id="_IDGenItem12"
                             key="{unitOfMeasurementCode}"
-                            text="{description}"
+                            text="{= ${code} + ' - ' + ${description} }"
                         />
-                    </m:Select>
+                    </m:ComboBox>
                     <Label
                         id="_IDGenLabel29"
                         text="Currency"
                     />
-                    <Select
+                    <ComboBox
                         id="mainCurrencySelect"
-                        forceSelection="false"
                         items="{path: '/Currency'}"
                     >
                         <core:Item id="mainCurrency"
                             key="{currencyCode}"
-                            text="{description}"
+                            text="{= ${code} + ' - ' + ${description} }"
                         />
-                    </Select>
+                    </ComboBox>
                     <Label
                         id="_IDGenLabel36"
                         text="OverF.Percentage"
@@ -752,32 +748,30 @@
                         id="_IDGenLabel40"
                         text="Mat Group"
                     />
-                    <Select
+                    <ComboBox
                         id="mainMatGroupSelect"
-                        forceSelection="false"
                         items="{path: '/MatGroups'}"
                     >
                         <core:Item
                             id="_IDGenItem9"
                             key="{materialGroupCode}"
-                            text="{description}"
+                            text="{= ${code} + ' - ' + ${description} }"
                         />
-                    </Select>
+                    </ComboBox>
                     <Label
                         id="_IDGenLabel41"
                         text="Service Type"
                     />
-                    <Select
+                    <ComboBox
                         id="mainServiceTypeSelect"
-                        forceSelection="false"
                         items="{path: '/ServiceTypes'}"
                     >
                         <core:Item
                             id="_IDGenItem10"
                             key="{serviceTypeCode}"
-                            text="{description}"
+                            text="{= ${serviceId} + ' - ' + ${description} }"
                         />
-                    </Select>
+                    </ComboBox>
                     <Label
                         id="_IDGenLabel33"
                         text="External Service No"
@@ -806,47 +800,44 @@
                         id="_IDGenLabel44"
                         text="Personnel Number"
                     />
-                    <Select
+                    <ComboBox
                         id="personnelNumber"
-                        forceSelection="false"
                         items="{path: '/personnelNumbers'}"
                     >
                         <core:Item
                             id="_IDGenItem13"
                             key="{personnelNumberCode}"
-                            text="{description}"
+                            text="{= ${code} + ' - ' + ${description} }"
                         />
-                    </Select>
+                    </ComboBox>
                     <Label
                         id="_IDGenLabel15"
                         text="Service Types"
                     />
-                    <Select
+                    <ComboBox
                         id="serviceTypes"
-                        forceSelection="false"
                         items="{path: '/ServiceTypes'}"
                     >
                         <core:Item
                             id="_IDGenItem15"
                             key="{serviceTypeCode}"
-                            text="{description}"
+                            text="{= ${serviceId} + ' - ' + ${description} }"
                         />
-                    </Select>
+                    </ComboBox>
                     <Label
                         id="_IDGenLabel45"
                         text="Line Types"
                     />
-                    <Select
+                    <ComboBox
                         id="lineTypes"
-                        forceSelection="false"
                         items="{path: '/LineTypes'}"
                     >
                         <core:Item
                             id="_IDGenItem17"
                             key="{lineTypeCode}"
-                            text="{description}"
+                            text="{= ${code} + ' - ' + ${description} }"
                         />
-                    </Select>
+                    </ComboBox>
                     <Label id="_IDGenLabel47"
                         text="Line Number"
                     />

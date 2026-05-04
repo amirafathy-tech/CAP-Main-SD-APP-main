@@ -1027,7 +1027,7 @@ module.exports = cds.service.impl(async function () {
 
   // DELETE /servicenumbers/{id}
   this.on('DELETE', ServiceNumbers, async (req) => {
-    return await DELETE.from(ServiceNumber).where({ serviceNumberCode: req.data.serviceNumberCode });
+    return await DELETE.from(ServiceNumbers).where({ serviceNumberCode: req.data.serviceNumberCode });
   });
 
   // Custom action for search

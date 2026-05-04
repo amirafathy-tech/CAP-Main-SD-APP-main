@@ -96,18 +96,20 @@
                             required="true"
                             text="Select Currency"
                         />
-                        <Select
+                        <ComboBox
                             id="currency"
                             width="200px"
-                            forceSelection="false"
+                            showSecondaryValues="true"
+                            filterSecondaryValues="true"
                             items="{path: 'currencies>/'}"
                         >
                             <core:Item
                                 id="_IDGenItem8"
                                 key="{currencies>currencyCode}"
-                                text="{currencies>description}"
+                             text="{= ${currencies>code} + ' - ' + ${currencies>description} }"
+                              
                             />
-                        </Select>
+                        </ComboBox>
                     </form:content>
                 </form:SimpleForm>
                 <HBox

@@ -75,6 +75,7 @@ sap.ui.define([
           if (data && data.value) {
             const ServiceTypes = data.value.map(item => ({
               serviceTypeCode: item.serviceTypeCode,
+              serviceId: item.serviceId,
               description: item.description
             }));
             this.getView().getModel().setProperty("/ServiceTypes", ServiceTypes);
@@ -91,6 +92,7 @@ sap.ui.define([
           if (data && data.value) {
             const MaterialGroups = data.value.map(item => ({
               materialGroupCode: item.materialGroupCode,
+              code: item.code,
               description: item.description
             }));
             this.getView().getModel().setProperty("/MaterialGroup", MaterialGroups);
@@ -762,19 +764,17 @@ sap.ui.define([
 
             new sap.m.Label({ text: "UOM" }),
             // FIX 3: items template key must use {code} — that's what we store in /Uom array
-            new sap.m.Select(this.createId("editUOM"), {
+            new sap.m.ComboBox(this.createId("editUOM"), {
               selectedKey: "{/editRow/unitOfMeasurementCode}",
-              forceSelection: false,
-              change: function (oEvt) {
-                // Explicitly write selected key back to model to survive re-render
+              selectionChange: function (oEvt) {
                 var sKey = oEvt.getParameter("selectedItem").getKey();
                 oModel.setProperty("/editRow/unitOfMeasurementCode", sKey);
               },
               items: {
                 path: "/Uom",
                 template: new sap.ui.core.Item({
-                  key: "{code}",          // FIX: was {unitOfMeasurementCode} — entity exposes {code}
-                  text: "{description}"
+                  key: "{code}",
+                  text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } }
                 })
               }
             }),
@@ -792,27 +792,25 @@ sap.ui.define([
             new sap.m.CheckBox({ selected: "{/editRow/manualPriceEntryAllowed}" }),
 
             new sap.m.Label({ text: "Material Group" }),
-            new sap.m.Select(this.createId("editMaterialGroup"), {
+            new sap.m.ComboBox(this.createId("editMaterialGroup"), {
               selectedKey: "{/editRow/materialGroupCode}",
-              forceSelection: false,
               items: {
                 path: "/MaterialGroup",
                 template: new sap.ui.core.Item({
                   key: "{materialGroupCode}",
-                  text: "{description}"
+                  text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } }
                 })
               }
             }),
 
             new sap.m.Label({ text: "Service Type" }),
-            new sap.m.Select(this.createId("editServiceType"), {
+            new sap.m.ComboBox(this.createId("editServiceType"), {
               selectedKey: "{/editRow/serviceTypeCode}",
-              forceSelection: false,
               items: {
                 path: "/ServiceTypes",
                 template: new sap.ui.core.Item({
                   key: "{serviceTypeCode}",
-                  text: "{description}"
+                  text: { parts: ["serviceId", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } }
                 })
               }
             }),
@@ -1054,17 +1052,16 @@ sap.ui.define([
           content: [
             // ── Service Number (dropdown) ──────────────────────────────────
             new sap.m.Label({ text: "Service No" }),
-            new sap.m.Select(this.createId("addExecServiceNo"), {
-              forceSelection: false,
+            new sap.m.ComboBox(this.createId("addExecServiceNo"), {
               width: "100%",
               items: {
                 path: "/ServiceNumbers",
                 template: new sap.ui.core.Item({
                   key: "{serviceNumberCode}",
-                  text: "{description}"
+                  text: { parts: ["serviceNumberCode", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } }
                 })
               },
-              change: function (oEvent) {
+              selectionChange: function (oEvent) {
                 var oItem = oEvent.getParameter("selectedItem");
                 if (oItem) {
                   that.byId("addExecDescription").setValue(oItem.getText());
@@ -1089,14 +1086,13 @@ sap.ui.define([
 
             // ── UOM (dropdown) ────────────────────────────────────────────
             new sap.m.Label({ text: "UOM" }),
-            new sap.m.Select(this.createId("addExecUOM"), {
-              forceSelection: false,
+            new sap.m.ComboBox(this.createId("addExecUOM"), {
               width: "100%",
               items: {
                 path: "/Uom",
                 template: new sap.ui.core.Item({
                   key: "{code}",
-                  text: "{description}"
+                  text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } }
                 })
               }
             }),
@@ -1114,14 +1110,13 @@ sap.ui.define([
 
             // ── Currency (dropdown) ────────────────────────────────────────
             new sap.m.Label({ text: "Currency" }),
-            new sap.m.Select(this.createId("addExecCurrency"), {
-              forceSelection: false,
+            new sap.m.ComboBox(this.createId("addExecCurrency"), {
               width: "100%",
               items: {
                 path: "/Currencies",
                 template: new sap.ui.core.Item({
                   key: "{code}",
-                  text: "{description}"
+                  text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } }
                 })
               }
             }),
@@ -1144,28 +1139,26 @@ sap.ui.define([
 
             // ── Material Group (dropdown) ─────────────────────────────────
             new sap.m.Label({ text: "Material Group" }),
-            new sap.m.Select(this.createId("addExecMatGroup"), {
-              forceSelection: false,
+            new sap.m.ComboBox(this.createId("addExecMatGroup"), {
               width: "100%",
               items: {
                 path: "/MaterialGroup",
                 template: new sap.ui.core.Item({
                   key: "{materialGroupCode}",
-                  text: "{description}"
+                  text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } }
                 })
               }
             }),
 
             // ── Service Type (dropdown) ───────────────────────────────────
             new sap.m.Label({ text: "Service Type" }),
-            new sap.m.Select(this.createId("addExecSrvType"), {
-              forceSelection: false,
+            new sap.m.ComboBox(this.createId("addExecSrvType"), {
               width: "100%",
               items: {
                 path: "/ServiceTypes",
                 template: new sap.ui.core.Item({
                   key: "{serviceTypeCode}",
-                  text: "{description}"
+                  text: { parts: ["serviceId", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } }
                 })
               }
             }),

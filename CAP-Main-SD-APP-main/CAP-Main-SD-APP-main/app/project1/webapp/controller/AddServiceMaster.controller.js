@@ -105,7 +105,8 @@ sap.ui.define([
             var toBeConvertedNum = oView.byId("_IDGenInput5").getValue();
             var convertedNum = oView.byId("_IDGenInput9").getValue();
             var serviceTypeCode = oView.byId("_IDGenSelect5").getSelectedKey();
-            var unitOfMeasurementCode = oView.byId("_IDGenSelect1").getSelectedKey();
+            var unitOfMeasurementCode = oView.byId("_IDGenComboBox1").getSelectedKey();
+            var baseUnitOfMeasurement = oView.byId("_IDGenComboBox1").getSelectedKey();
             var toBeConvertedUOM = oView.byId("_IDGenSelect2").getSelectedKey();
             var convertedUOM = oView.byId("_IDGenSelect3").getSelectedKey();
             var materialGroupCode = oView.byId("_IDGenSelect4").getSelectedKey();
@@ -135,6 +136,7 @@ sap.ui.define([
                 convertedNumber: this._isValidNumber(convertedNum) ? parseInt(convertedNum, 10) : null,
                 serviceTypeCode: serviceTypeCode || null,
                 unitOfMeasurementCode: unitOfMeasurementCode || null,
+                baseUnitOfMeasurement: baseUnitOfMeasurement || null,
                 toBeConvertedUnitOfMeasurement: toBeConvertedUOM || null,
                 defaultUnitOfMeasurement: convertedUOM || null,
                 mainItem: mainItem,

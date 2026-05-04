@@ -27,7 +27,7 @@
                         width="100%"/> -->
                     
                     <Label id="_IDGenLabel" text="Select Item Number" required="true" />
-    <Select
+    <ComboBox
     id="_IDGenSelect"
     width="100%"
     selectedKey="{/SelectedItemNumber}"
@@ -38,7 +38,7 @@
     <core:Item id="_IDGenItem"
         key="{SalesQuotationItem}"
         text="{SalesQuotationItem}::{SalesQuotationItemText}" />
-</Select>
+</ComboBox>
 
                     
                     <Text id="_IDGenText" text="{/ErrorMessage}" visible="{= !!${/ErrorMessage} }" />

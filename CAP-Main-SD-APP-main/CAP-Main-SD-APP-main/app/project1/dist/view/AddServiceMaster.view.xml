@@ -101,19 +101,19 @@
                         class="sapUiSmallMarginEnd"
                         text="Select Service Type"
                     />
-                    <Select
+                    <ComboBox
                         id="_IDGenSelect5"
                         class="sapUiSmallMarginStart"
                         width="200px"
-                        forceSelection="false"
-                        items="{	path: 'serviceTypes>/'}"
+                        filterSecondaryValues="true"
+                        items="{path: 'serviceTypes>/'}"
                     >
                         <core:Item
                             id="_IDGenItem5"
                             key="{serviceTypes>serviceTypeCode}"
-                            text="{serviceTypes>description}"
+                            text="{= ${serviceTypes>serviceId} + ' - ' + ${serviceTypes>description} }"
                         />
-                    </Select>
+                    </ComboBox>
                 </VBox>
                 <VBox
                     id="_IDGenVBox12"
@@ -125,7 +125,7 @@
                         class="sapUiSmallMarginEnd"
                         text="Select Base UnitOfMeasurment"
                     />
-                    <Select
+                    <!-- <Select
                         id="_IDGenSelect1"
                         class="sapUiSmallMarginStart"
                         width="200px"
@@ -135,9 +135,23 @@
                         <core:Item
                             id="_IDGenItem6"
                             key="{unitsOfMeasurement>code}"
-                            text="{unitsOfMeasurement>description}"
+                            text="{= ${unitsOfMeasurement>code} + ' - ' + ${unitsOfMeasurement>description} }"
                         />
-                    </Select>
+                    </Select> -->
+                    <ComboBox
+    id="_IDGenComboBox1"
+    class="sapUiSmallMarginStart"
+    width="250px"
+    showSecondaryValues="true"
+    filterSecondaryValues="true"
+    items="{path: 'unitsOfMeasurement>/'}"
+>
+    <core:Item id="_IDGenItem16"
+        key="{unitsOfMeasurement>code}"
+            text="{= ${unitsOfMeasurement>code} + ' - ' + ${unitsOfMeasurement>description} }"
+        
+    />
+</ComboBox>
                 </VBox>
             </HBox>
         </Panel>
@@ -176,19 +190,19 @@
                         class="sapUiSmallMarginStart"
                     />
 
-                    <Select
+                    <ComboBox
                         id="_IDGenSelect2"
                         class="sapUiSmallMarginStart"
                         width="200px"
-                        forceSelection="false"
-                        items="{	path: 'unitsOfMeasurement>/'}"
+                        filterSecondaryValues="true"
+                        items="{path: 'unitsOfMeasurement>/'}"
                     >
                         <core:Item
                             id="_IDGenItem3"
-                             key="{unitsOfMeasurement>code}"
-                            text="{unitsOfMeasurement>description}"
+                            key="{unitsOfMeasurement>code}"
+                            text="{= ${unitsOfMeasurement>code} + ' - ' + ${unitsOfMeasurement>description} }"
                         />
-                    </Select>
+                    </ComboBox>
                 </VBox>
             </HBox>
             <HBox id="_IDGenHBox15">
@@ -217,20 +231,19 @@
                         text="Select  Converted UOM:"
                         class="sapUiSmallMarginStart"
                     />
-                    <Select
+                    <ComboBox
                         id="_IDGenSelect3"
                         class="sapUiSmallMarginStart"
                         width="200px"
-                        forceSelection="false"
-                    items="{	path: 'unitsOfMeasurement>/'}"
-
+                        filterSecondaryValues="true"
+                        items="{path: 'unitsOfMeasurement>/'}"
                     >
                         <core:Item
                             id="_IDGenItem4"
-                           key="{unitsOfMeasurement>code}"
-                            text="{unitsOfMeasurement>description}"
+                            key="{unitsOfMeasurement>code}"
+                            text="{= ${unitsOfMeasurement>code} + ' - ' + ${unitsOfMeasurement>description} }"
                         />
-                    </Select>
+                    </ComboBox>
                 </VBox>
             </HBox>
             <HBox
@@ -249,19 +262,19 @@
                     text="Select Material Group:"
                     class="sapUiSmallMarginStart marginTop marginEnd marginStart"
                 />
-                <Select
+                <ComboBox
                     id="_IDGenSelect4"
                     class="sapUiSmallMarginStart"
                     width="200px"
-                    forceSelection="false"
-                    items="{	path: 'materialGroups>/'}"
+                    filterSecondaryValues="true"
+                    items="{path: 'materialGroups>/'}"
                 >
                     <core:Item
                         id="_IDGenItem7"
                         key="{materialGroups>materialGroupCode}"
-                        text="{materialGroups>description}"
+                        text="{= ${materialGroups>code} + ' - ' + ${materialGroups>description} }"
                     />
-                </Select>
+                </ComboBox>
             </HBox>
             <HBox
                 id="_IDGenHBox17"

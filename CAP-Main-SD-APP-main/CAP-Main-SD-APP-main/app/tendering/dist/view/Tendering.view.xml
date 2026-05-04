@@ -166,10 +166,10 @@
                     <m:Input id="mainItemNoInput" placeholder="Main Item No"/>
 
                     <m:Label id="_IDGenLabel4" text="Service No"/>
-                    <m:Select id="mainServiceNoSelect" selectedKey="{/SelectedServiceNumber}" forceSelection="false"
+                    <m:ComboBox id="mainServiceNoSelect" selectedKey="{/SelectedServiceNumber}"
                               items="{path: '/ServiceNumbers'}" change=".onServiceNumberChange">
-                        <core:Item id="_IDGenItem1" key="{serviceNumberCode}" text="{description}"/>
-                    </m:Select>
+                        <core:Item id="_IDGenItem1" key="{serviceNumberCode}" text="{= ${serviceNumberCode} + ' - ' + ${description} }"/>
+                    </m:ComboBox>
 
                     <m:Label id="_IDGenLabel5" text="Description"/>
                     <m:Input id="mainDescriptionInput" placeholder="Description"/>
@@ -181,14 +181,14 @@
                     <!-- ── Formula row ── -->
                     <m:Label id="_IDGenLabel7" text="Formula"/>
                     <m:HBox id="mainFormulaHBox" alignItems="Center" width="100%">
-                        <m:Select id="formulaSelect" forceSelection="false"
+                        <m:ComboBox id="formulaSelect"
                                   items="{path: '/Formulas'}" change=".onFormulaSelected">
                             <m:layoutData>
                                 <m:FlexItemData id="flexHBox1" growFactor="1" baseSize="0" minWidth="0"/>
                             </m:layoutData>
                             <core:Item id="_IDGenItem9"  key="" text="— None (enter qty manually) —"/>
-                            <core:Item id="_IDGenItem2"  key="{formulaCode}" text="{description}"/>
-                        </m:Select>
+                            <core:Item id="_IDGenItem2"  key="{formulaCode}" text="{= ${formula} + ' - ' + ${description} }"/>
+                        </m:ComboBox>
                         <m:Button id="btnClearFormula"
                                   icon="sap-icon://decline"
                                   type="Reject"
@@ -203,14 +203,14 @@
                               enabled="{/HasSelectedFormula}" press=".onOpenFormulaDialog"/>
 
                     <m:Label id="_IDGenLabel9" text="UOM"/>
-                    <m:Select id="mainUOMSelect" forceSelection="false" items="{path: '/UOM'}">
-                        <core:Item id="_IDGenItem3" key="{unitOfMeasurementCode}" text="{description}"/>
-                    </m:Select>
+                    <m:ComboBox id="mainUOMSelect" items="{path: '/UOM'}">
+                        <core:Item id="_IDGenItem3" key="{unitOfMeasurementCode}" text="{= ${code} + ' - ' + ${description} }"/>
+                    </m:ComboBox>
 
                     <m:Label id="_IDGenLabel10" text="Currency"/>
-                    <m:Select id="mainCurrencySelect" forceSelection="false" items="{path: '/Currency'}">
-                        <core:Item id="_IDGenItem4" key="{currencyCode}" text="{description}"/>
-                    </m:Select>
+                    <m:ComboBox id="mainCurrencySelect" items="{path: '/Currency'}">
+                        <core:Item id="_IDGenItem4" key="{currencyCode}" text="{= ${code} + ' - ' + ${description} }"/>
+                    </m:ComboBox>
 
                     <m:Label id="_IDGenLabel11" text="Amount Per Unit"/>
                     <m:Input id="mainAmountPerUnitInput" type="Number" placeholder="AmountPerUnit" liveChange=".onInputChange"/>
@@ -259,10 +259,10 @@
                     <m:Input id="subItemNoInput" placeholder="Sub Item No"/>
 
                     <m:Label id="_IDGenLabel18" text="Service No"/>
-                    <m:Select id="subServiceNoInput" selectedKey="{/SelectedSubServiceNumber}" forceSelection="false"
+                    <m:ComboBox id="subServiceNoInput" selectedKey="{/SelectedSubServiceNumber}"
                               items="{path: '/ServiceNumbers'}" change=".onSubServiceNumberChange">
-                        <core:Item id="_IDGenItem5" key="{serviceNumberCode}" text="{description}"/>
-                    </m:Select>
+                        <core:Item id="_IDGenItem5" key="{serviceNumberCode}" text="{= ${serviceNumberCode} + ' - ' + ${description} }"/>
+                    </m:ComboBox>
 
                     <m:Label id="_IDGenLabel19" text="Description"/>
                     <m:Input id="subDescriptionInput" placeholder="Description"
@@ -273,21 +273,21 @@
                              type="Number" liveChange=".onSubInputChange"/>
 
                     <m:Label id="_IDGenLabel21" text="UOM"/>
-                    <m:Select id="subUOMInput" forceSelection="false" items="{path: '/UOM'}">
-                        <core:Item id="_IDGenItem6" key="{unitOfMeasurementCode}" text="{description}"/>
-                    </m:Select>
+                    <m:ComboBox id="subUOMInput" items="{path: '/UOM'}">
+                        <core:Item id="_IDGenItem6" key="{unitOfMeasurementCode}" text="{= ${code} + ' - ' + ${description} }"/>
+                    </m:ComboBox>
 
                     <!-- ── Sub formula row with Clear button ── -->
                     <m:Label id="_IDGenLabel22" text="Formula (optional)"/>
                     <m:HBox id="subFormulaHBox" alignItems="Center" width="100%">
-                        <m:Select id="subFormulaSelect" forceSelection="false"
+                        <m:ComboBox id="subFormulaSelect"
                                   items="{path: '/Formulas'}" change=".onFormulaSelected">
                             <m:layoutData>
                                 <m:FlexItemData id="flexHBox" growFactor="1" baseSize="0" minWidth="0"/>
                             </m:layoutData>
                             <core:Item id="_IDGenItem7"  key="" text="— None (enter qty manually) —"/>
-                            <core:Item id="_IDGenItem7b" key="{formulaCode}" text="{description}"/>
-                        </m:Select>
+                            <core:Item id="_IDGenItem7b" key="{formulaCode}" text="{= ${formula} + ' - ' + ${description} }"/>
+                        </m:ComboBox>
                         <m:Button id="btnClearSubFormula"
                                   icon="sap-icon://decline"
                                   type="Reject"
@@ -306,9 +306,9 @@
                              type="Number" liveChange=".onSubInputChange"/>
 
                     <m:Label id="_IDGenLabel25" text="Currency"/>
-                    <m:Select id="subCurrencyInput" forceSelection="false" items="{path: '/Currency'}">
-                        <core:Item id="_IDGenItem8" key="{currencyCode}" text="{description}"/>
-                    </m:Select>
+                    <m:ComboBox id="subCurrencyInput" items="{path: '/Currency'}">
+                        <core:Item id="_IDGenItem8" key="{currencyCode}" text="{= ${code} + ' - ' + ${description} }"/>
+                    </m:ComboBox>
 
                     <m:Label id="_IDGenLabel26" text="Total"/>
                     <m:Input id="subTotalInput" placeholder="Total" editable="false" value="{/SubTotal}"/>
