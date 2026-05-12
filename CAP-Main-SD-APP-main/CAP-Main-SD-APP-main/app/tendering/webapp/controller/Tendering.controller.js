@@ -1167,7 +1167,8 @@ sap.ui.define([
                             new sap.m.Label({ text: "UOM" }),
                             new sap.m.ComboBox(this.createId("editSubUOM"), { selectedKey: "{/editRow/unitOfMeasurementCode}", items: { path: "/UOM", template: new sap.ui.core.Item({ key: "{code}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) } }),
                             new sap.m.Label({ text: "Formula" }),
-                            new sap.m.ComboBox(this.createId("editSubFormula"), { selectedKey: "{/editRow/formulaCode}", items: { path: "/Formulas", templateShareable: false, template: new sap.ui.core.Item({ key: "{formula}", text: { parts: ["formula", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) } }),
+                            new sap.m.ComboBox(this.createId("editSubFormula"), { selectedKey: "{/editRow/formulaCode}", selectionChange: this._onEditSubFormulaSelected.bind(this), items: { path: "/Formulas", templateShareable: false, template: new sap.ui.core.Item({ key: "{formula}", text: { parts: ["formula", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) } }),
+                            new sap.m.Button(this.createId("btnEditSubEnterParams"), { text: "Enter Parameters", enabled: "{= ${/editRow/formulaCode} ? true : false }", press: this.onOpenEditSubFormulaDialog.bind(this) }),
                             new sap.m.Label({ text: "Amount Per Unit" }),
                             new sap.m.Input({ value: "{/editRow/amountPerUnit}", type: "Number", liveChange: this._onSubValueChange.bind(this) }),
                             new sap.m.Label({ text: "Currency" }),
@@ -1255,6 +1256,62 @@ sap.ui.define([
         },
 
         _onEditFormulaSelected: function () { /* formula change in edit dialog */ },
+
+        _onEditSubFormulaSelected: function (oEvent) {
+            var oModel = this.getView().getModel();
+            var sKey = oEvent.getSource().getSelectedKey();
+            oModel.setProperty("/editRow/formulaCode", sKey || "");
+            if (!sKey) {
+                var oEditRow = oModel.getProperty("/editRow") || {};
+                oEditRow.quantity = "";
+                oModel.setProperty("/editRow", oEditRow);
+            }
+        },
+
+        onOpenEditSubFormulaDialog: function () {
+            var oModel = this.getView().getModel();
+            var sFormulaCode = oModel.getProperty("/editRow/formulaCode");
+            if (!sFormulaCode) { MessageToast.show("Please select a formula first."); return; }
+            var oFormula = (oModel.getProperty("/Formulas") || []).find(function (f) { return f.formula === sFormulaCode; });
+            if (!oFormula) { MessageToast.show("Formula not found."); return; }
+
+            if (this._oEditSubFormulaDialog) {
+                this._oEditSubFormulaDialog.destroy();
+                this._oEditSubFormulaDialog = null;
+            }
+
+            var aInputs = [];
+            var oVBox = new sap.m.VBox();
+            oFormula.parameterDescriptions.forEach(function (desc, i) {
+                var oInput = new sap.m.Input({ placeholder: "Enter " + desc });
+                oVBox.addItem(new sap.m.Label({ text: desc }));
+                oVBox.addItem(oInput);
+                aInputs.push({ id: oFormula.parameterIds[i], input: oInput });
+            });
+
+            var that = this;
+            this._oEditSubFormulaDialog = new sap.m.Dialog({
+                title: "Enter Formula Parameters",
+                content: [oVBox],
+                beginButton: new sap.m.Button({
+                    text: "OK", type: "Emphasized",
+                    press: function () {
+                        var oParams = {};
+                        aInputs.forEach(function (entry) { oParams[entry.id] = entry.input.getValue(); });
+                        var qty = that._calculateFormulaResult(oFormula, oParams);
+                        var oEditRow = oModel.getProperty("/editRow");
+                        oEditRow.quantity = qty;
+                        oEditRow.total = (qty * (parseFloat(oEditRow.amountPerUnit) || 0)).toFixed(3);
+                        oModel.setProperty("/editRow", oEditRow);
+                        MessageToast.show("Quantity updated from formula.");
+                        that._oEditSubFormulaDialog.close();
+                    }
+                }),
+                endButton: new sap.m.Button({ text: "Cancel", press: function () { that._oEditSubFormulaDialog.close(); } })
+            });
+            this.getView().addDependent(this._oEditSubFormulaDialog);
+            this._oEditSubFormulaDialog.open();
+        },
 
         onOpenEditFormulaDialog: function () {
             var oModel       = this.getView().getModel();
