@@ -53,7 +53,7 @@ sap.ui.define([
         })
         .catch(err => console.error("Error fetching ServiceNumbers:", err));
 
-      fetch("./odata/v4/sales-cloud/UnitOfMeasurements")
+      fetch("./odata/v4/sales-cloud/UnitOfMeasurements?$top=9999")
         .then(r => r.json())
         .then(data => {
           if (data && data.value) {
@@ -328,6 +328,7 @@ sap.ui.define([
           new sap.m.Column({ header: new sap.m.Label({ text: "UOM" }) }),
           new sap.m.Column({ header: new sap.m.Label({ text: "Quantity" }) }),
           new sap.m.Column({ header: new sap.m.Label({ text: "AmountPerUnit" }) }),
+          new sap.m.Column({ header: new sap.m.Label({ text: "AmountPerUnitWithProfit" }) }),
           new sap.m.Column({ header: new sap.m.Label({ text: "Currency" }) })
         ]
       });
@@ -364,6 +365,7 @@ sap.ui.define([
                 new sap.m.Text({ text: "{unitOfMeasurementCode}" }),
                 new sap.m.Text({ text: "{quantity}" }),
                 new sap.m.Text({ text: "{amountPerUnit}" }),
+                new sap.m.Text({ text: "{amountPerUnitWithProfit}" }),
                 new sap.m.Text({ text: "{currencyCode}" })
               ]
             }));
@@ -850,6 +852,12 @@ sap.ui.define([
           contentHeight: "auto",
           resizable: true,
           draggable: true,
+          afterOpen: function () {
+            var oRow = oModel.getProperty("/editRow") || {};
+            this.byId("editUOM").setSelectedKey(String(oRow.unitOfMeasurementCode || ""));
+            this.byId("editMaterialGroup").setSelectedKey(String(oRow.materialGroupCode || ""));
+            this.byId("editServiceType").setSelectedKey(String(oRow.serviceTypeCode || ""));
+          }.bind(this),
           content: [oForm],
           beginButton: new sap.m.Button({
             text: "Save",
@@ -860,8 +868,6 @@ sap.ui.define([
             text: "Cancel",
             press: function () {
               this._EditItemDialog.close();
-              this._EditItemDialog.destroy();
-              this._EditItemDialog = null;
             }.bind(this)
           })
         });
@@ -902,8 +908,6 @@ sap.ui.define([
       oModel.refresh(true);
 
       this._EditItemDialog.close();
-      this._EditItemDialog.destroy();
-      this._EditItemDialog = null;
       sap.m.MessageToast.show("Item updated successfully!");
     },
 
@@ -1058,7 +1062,7 @@ sap.ui.define([
                 path: "/ServiceNumbers",
                 template: new sap.ui.core.Item({
                   key: "{serviceNumberCode}",
-                  text: { parts: ["serviceNumberCode", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } }
+                  text: "{description}"
                 })
               },
               selectionChange: function (oEvent) {
@@ -1217,15 +1221,15 @@ sap.ui.define([
                 description:             that.byId("addExecDescription").getValue(),
                 totalQuantity:           qty,
                 actualQuantity:          0,
-                unitOfMeasurementCode:   oUOMItem    ? oUOMItem.getText()    : "",
+                unitOfMeasurementCode:   oUOMItem    ? oUOMItem.getKey()    : "",
                 amountPerUnit:           amt,
-                currencyCode:            oCurrItem   ? oCurrItem.getText()   : "",
+                currencyCode:            oCurrItem   ? oCurrItem.getKey()   : "",
                 total:                   qty * amt,
                 overFulfillmentPercent:  parseFloat(that.byId("addExecOverFulf").getValue()) || 0,
                 unlimitedOverFulfillment: that.byId("addExecUnlimOF").getSelected(),
                 manualPriceEntryAllowed: that.byId("addExecManualPrice").getSelected(),
-                materialGroupCode:       oMatGrpItem ? oMatGrpItem.getText() : "",
-                serviceTypeCode:         oSrvTypeItem? oSrvTypeItem.getText(): "",
+                materialGroupCode:       oMatGrpItem ? oMatGrpItem.getKey() : "",
+                serviceTypeCode:         oSrvTypeItem? oSrvTypeItem.getKey(): "",
                 externalServiceNumber:   that.byId("addExecExtSrvNo").getValue(),
                 serviceText:             that.byId("addExecSrvText").getValue(),
                 lineText:                that.byId("addExecLineText").getValue(),

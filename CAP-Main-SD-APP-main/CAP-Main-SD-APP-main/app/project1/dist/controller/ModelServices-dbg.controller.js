@@ -147,13 +147,10 @@ sap.ui.define([
                     console.error("Error fetching Formulas:", err);
                     sap.m.MessageToast.show("Failed to load formulas.");
                 });
-            fetch("./odata/v4/sales-cloud/UnitOfMeasurements")
-                .then(r => r.json())
-                .then(data => {
-                    const uom = Array.isArray(data.value) ? data.value : [];
-                    oModel.setProperty("/UOM", uom);
-                    oModel.refresh(true);
-                });
+            this._fetchAllPages("./odata/v4/sales-cloud/UnitOfMeasurements").then(uom => {
+                oModel.setProperty("/UOM", uom);
+                oModel.refresh(true);
+            });
 
             // Fetch Currencies
             fetch("./odata/v4/sales-cloud/Currencies")
@@ -205,6 +202,16 @@ sap.ui.define([
 
             this._loadModelSpecificationDetails(sModelSpecCode);
 
+        },
+        _fetchAllPages: async function (sBaseUrl) {
+            var all = [];
+            var url = sBaseUrl;
+            while (url) {
+                var data = await fetch(url).then(function (r) { return r.json(); });
+                all = all.concat(Array.isArray(data.value) ? data.value : []);
+                url = data["@odata.nextLink"] || null;
+            }
+            return all;
         },
         _loadModelSpecificationDetails: function (sModelSpecCode) {
             const oModel = this.getView().getModel("view");
@@ -330,7 +337,7 @@ sap.ui.define([
             var oModel = this.getView().getModel();
             var aFormulas = oModel.getProperty("/Formulas") || [];
 
-            var oFormula = aFormulas.find(f => f.formulaCode === sKey);
+            var oFormula = aFormulas.find(f => f.formula === sKey);
             oModel.setProperty("/SelectedFormula", oFormula || null);
             oModel.setProperty("/HasSelectedFormula", !!oFormula);
 
@@ -453,25 +460,25 @@ sap.ui.define([
                 serviceNumberCode: parseInt(oView.byId("mainModelServiceNoSelect").getSelectedKey()) || 0,
                 noServiceNumber: 0,
                 serviceTypeCode: oServiceTypeSelect && oServiceTypeSelect.getSelectedItem()
-                    ? oServiceTypeSelect.getSelectedItem().getText()
+                    ? oServiceTypeSelect.getSelectedItem().getKey()
                     : oModel.getProperty("/newModelService/serviceTypeCode") || "",
                 materialGroupCode: oMatGroupSelect && oMatGroupSelect.getSelectedItem()
-                    ? oMatGroupSelect.getSelectedItem().getText()
+                    ? oMatGroupSelect.getSelectedItem().getKey()
                     : oModel.getProperty("/newModelService/materialGroupCode") || "",
                 personnelNumberCode: oPersonnelSelect && oPersonnelSelect.getSelectedItem()
-                    ? oPersonnelSelect.getSelectedItem().getText()
+                    ? oPersonnelSelect.getSelectedItem().getKey()
                     : "",
                 unitOfMeasurementCode: oUOMSelect && oUOMSelect.getSelectedItem()
-                    ? oUOMSelect.getSelectedItem().getText()
+                    ? oUOMSelect.getSelectedItem().getKey()
                     : "",
                 formulaCode: oFormulaSelect && oFormulaSelect.getSelectedItem()
-                    ? oFormulaSelect.getSelectedItem().getText()
+                    ? oFormulaSelect.getSelectedItem().getKey()
                     : "",
                 currencyCode: oCurrencySelect && oCurrencySelect.getSelectedItem()
-                    ? oCurrencySelect.getSelectedItem().getText()
+                    ? oCurrencySelect.getSelectedItem().getKey()
                     : "",
                 lineTypeCode: oLineTypeSelect && oLineTypeSelect.getSelectedItem()
-                    ? oLineTypeSelect.getSelectedItem().getText()
+                    ? oLineTypeSelect.getSelectedItem().getKey()
                     : "",
                 selectionCheckBox: true,
                 lineIndex: "",
@@ -714,7 +721,7 @@ sap.ui.define([
 
             const oViewModel = this.getView().getModel(); // default model for master lists
             const aFormulas = oViewModel.getProperty("/Formulas") || [];
-            const oFormula = aFormulas.find(f => f.formulaCode === sFormulaCode);
+            const oFormula = aFormulas.find(f => f.formula === sFormulaCode);
 
             if (!oFormula) {
                 sap.m.MessageToast.show("Formula not found.");
@@ -779,6 +786,16 @@ sap.ui.define([
                     contentHeight: "80%",
                     resizable: true,
                     draggable: true,
+                    afterOpen: function () {
+                        var oRow = this._oEditDialog.getModel("editModel").getData();
+                        this.byId("editFormula").setSelectedKey(String(oRow.formulaCode || ""));
+                        this.byId("editUOM").setSelectedKey(String(oRow.unitOfMeasurementCode || ""));
+                        this.byId("editCurrency").setSelectedKey(String(oRow.currencyCode || ""));
+                        this.byId("editMatGroup").setSelectedKey(String(oRow.materialGroupCode || ""));
+                        this.byId("editServiceType").setSelectedKey(String(oRow.serviceTypeCode || ""));
+                        this.byId("editPersonnelNo").setSelectedKey(String(oRow.personnelNumberCode || ""));
+                        this.byId("editLineType").setSelectedKey(String(oRow.lineTypeCode || ""));
+                    }.bind(this),
                     content: new sap.ui.layout.form.SimpleForm({
                         editable: true,
                         layout: "ResponsiveGridLayout",
@@ -806,15 +823,15 @@ sap.ui.define([
                             new sap.m.Input({ type: "Number", value: "{editModel>/netValue}", editable: false }),
 
                             new sap.m.Label({ text: "Formula" }),
-                            new sap.m.ComboBox({
+                            new sap.m.ComboBox(this.createId("editFormula"), {
                                 selectedKey: "{editModel>/formulaCode}",
                                 selectionChange: function (oEvent) {
                                     var oModel = this._oEditDialog.getModel("editModel");
                                     var oSelectedItem = oEvent.getParameter("selectedItem");
-                                    var text = oSelectedItem ? oSelectedItem.getText() : "";
-                                    oModel.setProperty("/formulaCode", text);
+                                    var key = oSelectedItem ? oSelectedItem.getKey() : "";
+                                    oModel.setProperty("/formulaCode", key);
                                 }.bind(this),
-                                items: { path: "/Formulas", template: new sap.ui.core.Item({ key: "{description}", text: { parts: ["formula", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
+                                items: { path: "/Formulas", template: new sap.ui.core.Item({ key: "{formula}", text: { parts: ["formula", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
                             new sap.m.Button({
                                 text: "Enter Parameters", press: this.onOpenEditFormulaDialog.bind(this)
@@ -823,26 +840,26 @@ sap.ui.define([
                             }),
 
                             new sap.m.Label({ text: "UOM" }),
-                            new sap.m.ComboBox({
+                            new sap.m.ComboBox(this.createId("editUOM"), {
                                 selectedKey: "{editModel>/unitOfMeasurementCode}",
                                 selectionChange: function (oEvent) {
                                     var oModel = this._oEditDialog.getModel("editModel");
                                     var oSelectedItem = oEvent.getParameter("selectedItem");
-                                    var text = oSelectedItem ? oSelectedItem.getText() : "";
-                                    oModel.setProperty("/unitOfMeasurementCode", text);
+                                    var key = oSelectedItem ? oSelectedItem.getKey() : "";
+                                    oModel.setProperty("/unitOfMeasurementCode", key);
                                 }.bind(this),
-                                items: { path: "/UOM", template: new sap.ui.core.Item({ key: "{description}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
+                                items: { path: "/UOM", template: new sap.ui.core.Item({ key: "{code}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
                             new sap.m.Label({ text: "Currency" }),
-                            new sap.m.ComboBox({
+                            new sap.m.ComboBox(this.createId("editCurrency"), {
                                 selectedKey: "{editModel>/currencyCode}",
                                 selectionChange: function (oEvent) {
                                     var oModel = this._oEditDialog.getModel("editModel");
                                     var oSelectedItem = oEvent.getParameter("selectedItem");
-                                    var text = oSelectedItem ? oSelectedItem.getText() : "";
-                                    oModel.setProperty("/currencyCode", text);
+                                    var key = oSelectedItem ? oSelectedItem.getKey() : "";
+                                    oModel.setProperty("/currencyCode", key);
                                 }.bind(this),
-                                items: { path: "/Currency", template: new sap.ui.core.Item({ key: "{description}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
+                                items: { path: "/Currency", template: new sap.ui.core.Item({ key: "{code}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
                             new sap.m.Label({ text: "OverF.Percentage" }),
                             new sap.m.Input({ type: "Number", value: "{editModel>/overFulfilmentPercentage}" }),
@@ -857,15 +874,15 @@ sap.ui.define([
                             new sap.m.Input({ type: "Number", value: "{editModel>/pricePerUnitOfMeasurement}" }),
 
                             new sap.m.Label({ text: "Mat Group" }),
-                            new sap.m.ComboBox({
+                            new sap.m.ComboBox(this.createId("editMatGroup"), {
                                 selectedKey: "{editModel>/materialGroupCode}",
-                                items: { path: "/MatGroups", template: new sap.ui.core.Item({ key: "{materialGroupCode}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
+                                items: { path: "/MatGroups", template: new sap.ui.core.Item({ key: "{code}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
 
                             new sap.m.Label({ text: "Service Type" }),
-                            new sap.m.ComboBox({
+                            new sap.m.ComboBox(this.createId("editServiceType"), {
                                 selectedKey: "{editModel>/serviceTypeCode}",
-                                items: { path: "/ServiceTypes", template: new sap.ui.core.Item({ key: "{serviceTypeCode}", text: { parts: ["serviceId", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
+                                items: { path: "/ServiceTypes", template: new sap.ui.core.Item({ key: "{serviceId}", text: { parts: ["serviceId", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
 
                             new sap.m.Label({ text: "External Service No" }),
@@ -878,15 +895,15 @@ sap.ui.define([
                             new sap.m.Input({ value: "{editModel>/lineText}" }),
 
                             new sap.m.Label({ text: "Personnel Number" }),
-                            new sap.m.ComboBox({
+                            new sap.m.ComboBox(this.createId("editPersonnelNo"), {
                                 selectedKey: "{editModel>/personnelNumberCode}",
-                                items: { path: "/personnelNumbers", template: new sap.ui.core.Item({ key: "{personnelNumberCode}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
+                                items: { path: "/personnelNumbers", template: new sap.ui.core.Item({ key: "{code}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
 
                             new sap.m.Label({ text: "Line Types" }),
-                            new sap.m.ComboBox({
+                            new sap.m.ComboBox(this.createId("editLineType"), {
                                 selectedKey: "{editModel>/lineTypeCode}",
-                                items: { path: "/LineTypes", template: new sap.ui.core.Item({ key: "{lineTypeCode}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
+                                items: { path: "/LineTypes", template: new sap.ui.core.Item({ key: "{code}", text: { parts: ["code", "description"], formatter: function(c, d) { return (c || "") + " - " + (d || ""); } } }) }
                             }),
 
                             new sap.m.Label({ text: "Line Number" }),
@@ -942,9 +959,6 @@ sap.ui.define([
             }
 
             try {
-                // Remove virtual-only fields before sending PATCH.
-                // unitOfMeasurementCode / currencyCode / formulaCode already hold description
-                // text (the edit dialog selects now use description as key, matching DB storage).
                 const { currencyDescription, unitOfMeasurementDescription, formulaDescription, ...payload } = oData;
 
                 // --- API PATCH ---
@@ -967,16 +981,6 @@ sap.ui.define([
                 var oRow = aRows.find(r => r.modelSpecDetailsCode === oData.modelSpecDetailsCode);
 
                 if (oRow) {
-                    // unitOfMeasurementCode / currencyCode / formulaCode in oData already
-                    // hold description text — just copy straight across.
-                    oRow.unitOfMeasurementCode        = oData.unitOfMeasurementCode;
-                    oRow.unitOfMeasurementDescription = oData.unitOfMeasurementCode;
-                    oRow.currencyCode                 = oData.currencyCode;
-                    oRow.currencyDescription          = oData.currencyCode;
-                    oRow.formulaCode                  = oData.formulaCode;
-                    oRow.formulaDescription           = oData.formulaCode;
-
-                    // Copy remaining edited fields
                     Object.assign(oRow, payload);
                 }
 

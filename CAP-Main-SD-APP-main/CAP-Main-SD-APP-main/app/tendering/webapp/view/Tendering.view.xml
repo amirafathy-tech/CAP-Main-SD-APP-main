@@ -168,7 +168,7 @@
                     <m:Label id="_IDGenLabel4" text="Service No"/>
                     <m:ComboBox id="mainServiceNoSelect" selectedKey="{/SelectedServiceNumber}"
                               items="{path: '/ServiceNumbers'}" change=".onServiceNumberChange">
-                        <core:Item id="_IDGenItem1" key="{serviceNumberCode}" text="{= ${serviceNumberCode} + ' - ' + ${description} }"/>
+                        <core:Item id="_IDGenItem1" key="{serviceNumberCode}" text="{description}"/>
                     </m:ComboBox>
 
                     <m:Label id="_IDGenLabel5" text="Description"/>
@@ -187,7 +187,7 @@
                                 <m:FlexItemData id="flexHBox1" growFactor="1" baseSize="0" minWidth="0"/>
                             </m:layoutData>
                             <core:Item id="_IDGenItem9"  key="" text="— None (enter qty manually) —"/>
-                            <core:Item id="_IDGenItem2"  key="{formulaCode}" text="{= ${formula} + ' - ' + ${description} }"/>
+                            <core:Item id="_IDGenItem2"  key="{formula}" text="{= ${formula} + ' - ' + ${description} }"/>
                         </m:ComboBox>
                         <m:Button id="btnClearFormula"
                                   icon="sap-icon://decline"
@@ -204,12 +204,12 @@
 
                     <m:Label id="_IDGenLabel9" text="UOM"/>
                     <m:ComboBox id="mainUOMSelect" items="{path: '/UOM'}">
-                        <core:Item id="_IDGenItem3" key="{unitOfMeasurementCode}" text="{= ${code} + ' - ' + ${description} }"/>
+                        <core:Item id="_IDGenItem3" key="{code}" text="{= ${code} + ' - ' + ${description} }"/>
                     </m:ComboBox>
 
                     <m:Label id="_IDGenLabel10" text="Currency"/>
                     <m:ComboBox id="mainCurrencySelect" items="{path: '/Currency'}">
-                        <core:Item id="_IDGenItem4" key="{currencyCode}" text="{= ${code} + ' - ' + ${description} }"/>
+                        <core:Item id="_IDGenItem4" key="{code}" text="{= ${code} + ' - ' + ${description} }"/>
                     </m:ComboBox>
 
                     <m:Label id="_IDGenLabel11" text="Amount Per Unit"/>
@@ -261,7 +261,7 @@
                     <m:Label id="_IDGenLabel18" text="Service No"/>
                     <m:ComboBox id="subServiceNoInput" selectedKey="{/SelectedSubServiceNumber}"
                               items="{path: '/ServiceNumbers'}" change=".onSubServiceNumberChange">
-                        <core:Item id="_IDGenItem5" key="{serviceNumberCode}" text="{= ${serviceNumberCode} + ' - ' + ${description} }"/>
+                        <core:Item id="_IDGenItem5" key="{serviceNumberCode}" text="{description}"/>
                     </m:ComboBox>
 
                     <m:Label id="_IDGenLabel19" text="Description"/>
@@ -274,7 +274,7 @@
 
                     <m:Label id="_IDGenLabel21" text="UOM"/>
                     <m:ComboBox id="subUOMInput" items="{path: '/UOM'}">
-                        <core:Item id="_IDGenItem6" key="{unitOfMeasurementCode}" text="{= ${code} + ' - ' + ${description} }"/>
+                        <core:Item id="_IDGenItem6" key="{code}" text="{= ${code} + ' - ' + ${description} }"/>
                     </m:ComboBox>
 
                     <!-- ── Sub formula row with Clear button ── -->
@@ -286,7 +286,7 @@
                                 <m:FlexItemData id="flexHBox" growFactor="1" baseSize="0" minWidth="0"/>
                             </m:layoutData>
                             <core:Item id="_IDGenItem7"  key="" text="— None (enter qty manually) —"/>
-                            <core:Item id="_IDGenItem7b" key="{formulaCode}" text="{= ${formula} + ' - ' + ${description} }"/>
+                            <core:Item id="_IDGenItem7b" key="{formula}" text="{= ${formula} + ' - ' + ${description} }"/>
                         </m:ComboBox>
                         <m:Button id="btnClearSubFormula"
                                   icon="sap-icon://decline"
@@ -307,7 +307,7 @@
 
                     <m:Label id="_IDGenLabel25" text="Currency"/>
                     <m:ComboBox id="subCurrencyInput" items="{path: '/Currency'}">
-                        <core:Item id="_IDGenItem8" key="{currencyCode}" text="{= ${code} + ' - ' + ${description} }"/>
+                        <core:Item id="_IDGenItem8" key="{code}" text="{= ${code} + ' - ' + ${description} }"/>
                     </m:ComboBox>
 
                     <m:Label id="_IDGenLabel26" text="Total"/>

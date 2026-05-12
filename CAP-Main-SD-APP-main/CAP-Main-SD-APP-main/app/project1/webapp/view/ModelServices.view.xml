@@ -618,7 +618,7 @@
                         <core:Item
                             id="_IDGenItem14"
                             key="{serviceNumberCode}"
-                            text="{= ${serviceNumberCode} + ' - ' + ${description} }"
+                            text="{description}"
                         />
                     </m:ComboBox>
                     <m:Label
@@ -671,7 +671,7 @@
                     >
                         <core:Item
                             id="_IDGenItem11"
-                            key="{formulaCode}"
+                            key="{formula}"
                             text="{= ${formula} + ' - ' + ${description} }"
                         />
                     </m:ComboBox>
@@ -695,7 +695,7 @@
                     >
                         <core:Item
                             id="_IDGenItem12"
-                            key="{unitOfMeasurementCode}"
+                            key="{code}"
                             text="{= ${code} + ' - ' + ${description} }"
                         />
                     </m:ComboBox>
@@ -708,7 +708,7 @@
                         items="{path: '/Currency'}"
                     >
                         <core:Item id="mainCurrency"
-                            key="{currencyCode}"
+                            key="{code}"
                             text="{= ${code} + ' - ' + ${description} }"
                         />
                     </ComboBox>
@@ -754,7 +754,7 @@
                     >
                         <core:Item
                             id="_IDGenItem9"
-                            key="{materialGroupCode}"
+                            key="{code}"
                             text="{= ${code} + ' - ' + ${description} }"
                         />
                     </ComboBox>
@@ -768,7 +768,7 @@
                     >
                         <core:Item
                             id="_IDGenItem10"
-                            key="{serviceTypeCode}"
+                            key="{serviceId}"
                             text="{= ${serviceId} + ' - ' + ${description} }"
                         />
                     </ComboBox>
@@ -806,7 +806,7 @@
                     >
                         <core:Item
                             id="_IDGenItem13"
-                            key="{personnelNumberCode}"
+                            key="{code}"
                             text="{= ${code} + ' - ' + ${description} }"
                         />
                     </ComboBox>
@@ -820,7 +820,7 @@
                     >
                         <core:Item
                             id="_IDGenItem15"
-                            key="{serviceTypeCode}"
+                            key="{serviceId}"
                             text="{= ${serviceId} + ' - ' + ${description} }"
                         />
                     </ComboBox>
@@ -834,7 +834,7 @@
                     >
                         <core:Item
                             id="_IDGenItem17"
-                            key="{lineTypeCode}"
+                            key="{code}"
                             text="{= ${code} + ' - ' + ${description} }"
                         />
                     </ComboBox>
